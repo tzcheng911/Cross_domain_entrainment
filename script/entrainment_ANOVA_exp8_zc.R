@@ -8,6 +8,7 @@ library('fastDummies')
 library(effsize)
 library(lsr)
 
+## sc updated 03/20/2023
 ## Load the data
 EXPtone = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8b_clean_n84.csv") 
 EXPspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8a_clean_n80.csv")

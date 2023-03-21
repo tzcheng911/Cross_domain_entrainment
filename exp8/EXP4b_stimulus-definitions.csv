@@ -1,0 +1,62 @@
+﻿type,content,alignment,name,size,visible,delay
+text,"<p>Welcome! <br /> <br /> <br /> In this study, you will listen to a series of sounds and press keys to enter a response. It will take less than 60 mins to finish this experiment. <br /> Please use earphones, earbuds or headphones while completing the task. Please adjust your volume to a comfortable sound level. <br />You will begin with a questionnaire asking about your listening devices and how noisy your current environment is.</p>",center,LandingWelcome,,,
+text,"<p>Good job! Ok, let's move on to the real experiment now. <br /> <br /> You won't see or hear the feedback in the following session. It is VERY IMPORTANT that you remember to select whether the LAST tone feels longer or shorter.</p>",center,PracticeBreak,,,
+text,"How noisy is your current environment? (1 = Little to no noise, 5 = Very noisy)",center,logistics_noise,36px,,
+text,"What instrument(s) do you play (including vocal performance)? How long have you played each one? For examples: Guitar, 6 - 9 years old; Drum, 3 - 20 years old; Vocal, 18 - 20 years old",center,musicbackground1,36px,,
+text,"Have you taken any music courseworks? If so, what classes were you taking? How long have you taken them? For example: one quarter of music theory; three quarters of music history; one quarter of music appreciation.",center,musicbackground2,36px,,
+text,Please let us know anything about your musical experiences that you think is important but was not addressed in the previous two questions.,center,musicbackground3,36px,,
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_1.wav,,single_300ms_early_delay_2_tone_Lab_1,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_2.wav,,single_300ms_early_delay_2_tone_Lab_2,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_3.wav,,single_300ms_early_delay_2_tone_Lab_3,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_4.wav,,single_300ms_early_delay_2_tone_Lab_4,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_5.wav,,single_300ms_early_delay_2_tone_Lab_5,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_6.wav,,single_300ms_early_delay_2_tone_Lab_6,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_7.wav,,single_300ms_early_delay_2_tone_Lab_7,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_8.wav,,single_300ms_early_delay_2_tone_Lab_8,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_1.wav,,single_300ms_ontime_delay_2_tone_Lab_1,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_2.wav,,single_300ms_ontime_delay_2_tone_Lab_2,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_3.wav,,single_300ms_ontime_delay_2_tone_Lab_3,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_4.wav,,single_300ms_ontime_delay_2_tone_Lab_4,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_5.wav,,single_300ms_ontime_delay_2_tone_Lab_5,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_6.wav,,single_300ms_ontime_delay_2_tone_Lab_6,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_7.wav,,single_300ms_ontime_delay_2_tone_Lab_7,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_8.wav,,single_300ms_ontime_delay_2_tone_Lab_8,,false,0.3
+audio,620ddeee49655b42f1242551_tone_Lab_1.wav,,short_tone_1,,false,0.3
+text,Congradulations! You've completed the main task. We just have a few important questions to ask you before you go...,center,Instruction_Q,36px,,
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_1.wav,,single_300ms_late_delay_2_tone_Lab_1,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_2.wav,,single_300ms_late_delay_2_tone_Lab_2,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_3.wav,,single_300ms_late_delay_2_tone_Lab_3,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_4.wav,,single_300ms_late_delay_2_tone_Lab_4,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_5.wav,,single_300ms_late_delay_2_tone_Lab_5,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_6.wav,,single_300ms_late_delay_2_tone_Lab_6,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_7.wav,,single_300ms_late_delay_2_tone_Lab_7,,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_8.wav,,single_300ms_late_delay_2_tone_Lab_8,,false,0.3
+audio,620ddeee49655b42f1242551_stim347_songbird.wav,,songbird,,false,0.3
+audio,620ddeee49655b42f1242551_stim68_cat_meowing.wav,,cat_meowing,,false,0.3
+text,Please enter your age in years.,center,Age,36px,,
+text,Please select your gender,center,Gender,36px,,
+text,What did you think this experiment was about? Did you notice any recurring patterns?,center,debrief1,36px,,
+text,Did you change how you were answering at any time during the study? What did you change?,center,debrief2,36px,,
+text,Any other comments or observations about the study?,center,debrief3,36px,,
+text,"What language are you most comfortable with using? Who did you learn it from, and starting at what age? (Please be specific, for example, say Mandarin rather than Chinese; American English rather than English.) 
+
+ Example: <i>American English, parents, starting at birth</i>",center,DomLang,36px,,
+text,"<b>What language</b> are you NEXT most comfortable with using? <b>Who</b> did you learn it from, and starting at <b>what age</b>? (Please be specific, for example, say Mandarin rather than Chinese; American English rather than English.) 
+
+ Example: <i>Spanish, grandmother, starting at age 5</i>",center,NonDomLang,36px,,
+text,Please briefly list the language(s) you use in the following situations: at home; in dorm/apartment; while doing math in your head; while thinking; which one you would use for the rest of your life if you could pick just one. <i>Example response: Home: Spanish; Dorm: English; Math: English; Thinking: English; Rest of life: Italian.</i>,center,LangPrefs,36px,,
+text,Please answer these questions for the language you are most comfortable with.,center,DomLangQs,36px,,
+text,Please answer these questions for the language you are most comfortable with.,center,NonDomLangQs,36px,,
+text,"Are there any other languages that you speak or understand? Please describe them briefly here. 
+
+ Example: <i>understand Spanish from high school classes, speak a little Hindi with grandmother</i>",center,AnyOtherLang,36px,,
+text,"Which of the following listening devices are you currently using? ",center,logistic_headphone2,36px,,
+text,"Please use earphones, earbuds or headphones for this study. Are you using any of them now?",center,logistic_headphone1,36px,,
+text,"<p>Before we start the main experiment, let's do a quick test. In each trial, you will hear a tone. Your job is to respond whether this is a longer tone or shorter tone based on the examples, which will be played very soon. Press the corresponding key to indicate whether it is SHORTER or LONGER. If you are not sure, make your best guess. <br /><br />Let's listen to some examples!</p>",center,PretestI,,,
+text,"<p>Before we start the main experiment, let's do a quick test. In each trial, you will hear a tone. Your job is to respond whether this is a longer tone or shorter tone based on the examples, which will be played very soon. Press the 'J' key if it is SHORT or press the 'F' key if it is LONG. If you are not sure, make your best guess. <br /><br />Let's listen to some examples!</p>",center,PretestI_rv,,,
+text,"Now let's do some practice to get familiar with the real task. We will move on to the main task when you get most of them correct. If you aren't getting many correct, try listening more carefully.",center,practiceI,,,
+text,"<p>Excellent! Now please read the instruction carefully for the following task. In each trial, you will hear a series of short tones followed by a longer tone. For this task, pay attention to the last tone. Your job is to respond whether the last tone feels shorter or longer, press the corresponding key to indicate whether it is SHORTER or LONGER. If you are not sure, make your best guess. <br /><br />Let's listen to some examples!</p>",center,MainI,,,
+text,"<p>Excellent! Now please read the instruction carefully for the following task. In each trial, you will hear a series of short tones followed by a longer tone. For this task, pay attention to the last tone. Your job is to respond whether the last tone feels shorter or longer, press the 'J' key if it is SHORTER or press the 'F' key if it is LONGER. If you are not sure, make your best guess. <br /><br />Let's listen to four examples!</p>",center,MainI_rv,,,
+text,Good job! Take a break.,center,Break,36px,,
+audio,620ddeee49655b42f1242551_tone_Lab_8.wav,,long_tone_8,,false,0.3
+text,"<p> Below are my final reminders. <br /><br /> (1) Use your keyboard to respond instead of using your mouse. <br />(2) DON'T THINK. Follow your first intuition to make response ASAP. You cannot get it correct by thinking. <br />(3) The total time will depend on your response time, so try to respond as correct and fast as possible. <br />(4) This task is HARD, and thus requires your undivided attention, so please put away your phone or other distractors whlie doing this experiment. <br /><br /> That's all I have for you. Please try your best! Good luck.</ p>",center,Instruction_main,,,

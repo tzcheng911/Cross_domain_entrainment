@@ -1,0 +1,13 @@
+﻿type,choices,name,required,multi_select,wrap,feedback,key_mapping,instruction,target,layout
+choice,"[1,2,3,4,5]",survey_noise,,,,,,,,
+text,,TxRsp,true,,,,,,,
+choice,"[""I think I speak it with a foreign accent"",""I DON'T think I speak it with a foreign accent"",""I think I have lost fluency in this language"",""I DON'T think I have lost fluency in this language""]",LangResponses,,true,true,false,,,,
+choice,"[""Pa"",""Ba""]",testRsp_rv,,,,,"[""F"",""J""]",The speech sound you heard was:,,
+choice,"[""Female"",""Male"",""Other""]",basicRsp,,,,,,,,
+choice,"[""Ba"",""Pa""]",testRsp,,,,,"[""F"",""J""]",The speech sound you heard was:,,
+choice,"[""Ba"",""Pa""]",exampleRsp,,,,,"[""F"",""J""]",The speech sound you heard was:,,
+choice,"[""Pa"",""Ba""]",exampleRsp_rv,,,,,"[""F"",""J""]",Which word did you hear?,,
+choice,"[""Dog barking"",""Cat meowing""]",cat_catchRsp,,,,,"[""F"",""J""]",The sound you heard was:,"[""Cat meowing""]",
+choice,"[""Bird singing"",""Frog croaking""]",bird_catchRsp,,,,,"[""F"",""J""]",The sound you heard was:,"[""Bird singing""]",
+choice,"[""Wired Headphones"",""Wired Earbuds"",""Wireless Headphones"",""Wireless Earbuds"",""Built in Laptop/Desktop Speaker (Please use headphones if possible!)"",""External Ambient Speaker (Please use headphones if possible!)"",""Mobile Phone Speaker (Please complete on computer and use headphones if possible)"",""Other""]",survey_headphone2,,,,,,,,"[4,2]"
+choice,"[""Yes"",""No""]",Rsp_YN,,,,,,,,

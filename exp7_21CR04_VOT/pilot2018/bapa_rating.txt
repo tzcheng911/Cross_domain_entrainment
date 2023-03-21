@@ -1,0 +1,12 @@
+file name	6.5	6	5.5	5	4.5	4	3.5	3
+VOT (ms)	8.845	15.279	21.039	26.821	31.357	36.731	42.128	47.162
+Kriestie	/	/	/	/	pa	pa	pa	pa
+Cloey	ba	ba /a/	ba	ba	pa	pa	pa	pa
+Wu	ba	ba	ba	/	/	pa	pa	pa
+Connie	ba	ba 	ba	/	pa	pa	pa	pa
+	ba	ba	ba	ba	pa	pa	pa	pa
+F	ba	ba	ba	pa / 	pa	pa	pa	pa
+Sandhya	ba	pa	ba	ba	pa	pa	pa	pa
+Lauren	ba	ba /	ba /	pa	pa	pa	pa	pa
+Emily P	ba	ba /	ba	pa	pa	pa	pa	pa
+Dr. Creel	ba	ba	ba	ba	pa	pa	pa	pa

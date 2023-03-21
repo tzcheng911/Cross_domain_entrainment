@@ -1,0 +1,110 @@
+﻿type,content,alignment,size,name,visible,delay
+text,Please enter your age in years.,center,36px,Age,,
+text,"Are there any other languages that you speak or understand? Please describe them briefly here. 
+
+ Example: <i>understand Spanish from high school classes, speak a little Hindi with grandmother</i>",center,36px,AnyOtherLang,,
+audio,607affb9d112a7e23c03a96d_Back.wav,,,Back,false,0.3
+audio,607affb9d112a7e23c03a96d_Bag.wav,,,Bag,false,0.3
+audio,607affb9d112a7e23c03a96d_Bead.wav,,,Bead,false,0.3
+audio,607affb9d112a7e23c03a96d_Beat.wav,,,Beat,false,0.3
+text,Good job! Take a break.,center,36px,Break,,
+audio,607affb9d112a7e23c03a96d_Cab.wav,,,Cab,false,0.3
+audio,607affb9d112a7e23c03a96d_Cap.wav,,,Cap,false,0.3
+text,"<p>In this session, you will hear either “Lap” or “Lab” word on each trial. Press the 'F' key if you hear the word shown on the left or press the 'J' key if you hear the word shown on the right of the screen.</p>",center,,DiscriminationI,,
+text,"What language are you most comfortable with using? Who did you learn it from, and starting at what age? (Please be specific, for example, say Mandarin rather than Chinese; American English rather than English.) 
+
+ Example: <i>American English, parents, starting at birth</i>",center,36px,DomLang,,
+text,Please answer these questions for the language you are most comfortable with.,center,36px,DomLangQs,,
+text,"<p>Now please read the instruction carefully for the following task. In each trial, you will hear a series of short tones followed by a word. For this task, only pay attention to the word. Your job is to respond whether the word is “Lap” or “Lab”. Press the 'F' key if you hear the word shown on the left or press the 'J' key if you hear the word shown on the right of the screen. If you are not sure, please make the best guess as you can <br /><br />Let's listen to some examples!</p>",center,,EXP8a_MainI,,
+text,"<p>Excellent! Now please read the instruction carefully for the following task. In each trial, you will hear a series of short tones followed by a longer tone. For this task, pay attention to the last tone. Your job is to respond whether the last tone feels shorter or longer, press the corresponding key to indicate whether it is SHORTER or LONGER. If you are not sure, make your best guess. <br /><br />Let's listen to some examples!</p>",center,,EXP8b_MainI,,
+text,"<p>Excellent! Now please read the instruction carefully for the following task. In each trial, you will hear a series of short sounds followed by a longer sound. For this task, pay attention to the last sound. Your job is to respond whether the last sound is the tone version of “Lap” or “Lab”. Press the 'F' key if you hear the word shown on the left or press the 'J' key if you hear the word shown on the right of the screen. If you are not sure, please make the best guess as you can. <br /><br />Let's listen to some examples!</p>",center,,EXP8c_MainI,,
+audio,607affb9d112a7e23c03a96d_Fad.wav,,,Fad,false,0.3
+audio,607affb9d112a7e23c03a96d_Fat.wav,,,Fat,false,0.3
+text,Please select your gender,center,36px,Gender,,
+text,Congradulations! You've completed the main task. We just have a few important questions to ask you before you go...,center,,Instruction_Q,,
+text,"<p> Below are my final reminders. <br /><br /> (1) Use your keyboard to respond instead of using your mouse. <br />(2) DON'T THINK. Follow your first intuition to make response ASAP. You cannot get it correct by thinking. <br />(3) The total time will depend on your response time, so try to respond as correct and fast as possible. <br />(4) This task is HARD, and thus requires your undivided attention, so please put away your phone or other distractors whlie doing this experiment. <br /><br /> That's all I have for you. Please try your best! Good luck.</ p>",center,,Instruction_main,,
+audio,607affb9d112a7e23c03a96d_Lab.wav,,,Lab,false,0.3
+audio,607affb9d112a7e23c03a96d_Sarah_Lab_1.wav,,,Lab1,false,0.3
+audio,607affb9d112a7e23c03a96d_Sarah_Lab_2.wav,,,Lab2,false,0.3
+audio,607affb9d112a7e23c03a96d_Sarah_Lab_3.wav,,,Lab3,false,0.3
+audio,607affb9d112a7e23c03a96d_Sarah_Lab_4.wav,,,Lab4,false,0.3
+audio,607affb9d112a7e23c03a96d_Sarah_Lab_5.wav,,,Lab5,false,0.3
+audio,607affb9d112a7e23c03a96d_Sarah_Lab_6.wav,,,Lab6,false,0.3
+audio,607affb9d112a7e23c03a96d_Sarah_Lab_7.wav,,,Lab7,false,0.3
+audio,607affb9d112a7e23c03a96d_Sarah_Lab_8.wav,,,Lab8,false,0.3
+audio,607affb9d112a7e23c03a96d_Lack.wav,,,Lack,false,0.3
+audio,607affb9d112a7e23c03a96d_Lag.wav,,,Lag,false,0.3
+text,"<p>Welcome! <br /> <br /> <br /> In this study, you will listen to a series of sounds and press keys to enter a response. It will take less than 60 mins to finish this experiment. <br /> Please use earphones, earbuds or headphones while completing the task. Please adjust your volume to a comfortable sound level. <br />You will begin with a questionnaire asking about your listening devices and how noisy your current environment is.</p>",center,,LandingWelcome,,
+text,Please briefly list the language(s) you use in the following situations: at home; in dorm/apartment; while doing math in your head; while thinking; which one you would use for the rest of your life if you could pick just one. <i>Example response: Home: Spanish; Dorm: English; Math: English; Thinking: English; Rest of life: Italian.</i>,center,36px,LangPrefs,,
+audio,607affb9d112a7e23c03a96d_Lap.wav,,,Lap,false,0.3
+text,"<b>What language</b> are you NEXT most comfortable with using? <b>Who</b> did you learn it from, and starting at <b>what age</b>? (Please be specific, for example, say Mandarin rather than Chinese; American English rather than English.) 
+
+ Example: <i>Spanish, grandmother, starting at age 5</i>",center,36px,NonDomLang,,
+text,Please answer these questions for the language you are most comfortable with.,center,36px,NonDomLangQs,,
+text,"<p>Before we start the main experiment, let's do a quick test. In each trial, you will hear a word. Press the 'F' key if you hear the word shown on the left or press the 'J' key if you hear the word shown on the right of the screen. If you are not sure, make your best guess. </p>",center,,PrescreenI,,
+audio,607affb9d112a7e23c03a96d_stim68_cat_meowing.wav,,,cat_meowing,false,0.3
+text,What did you think this experiment was about? Did you notice any recurring patterns?,center,36px,debrief1,,
+text,Did you change how you were answering at any time during the study? What did you change?,center,36px,debrief2,,
+audio,607affb9d112a7e23c03a96d_300ms_early_delay_2_Sarah_Lab_1.wav,,,early_Lab1,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_early_delay_2_Sarah_Lab_2.wav,,,early_Lab2,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_early_delay_2_Sarah_Lab_3.wav,,,early_Lab3,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_early_delay_2_Sarah_Lab_4.wav,,,early_Lab4,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_early_delay_2_Sarah_Lab_5.wav,,,early_Lab5,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_early_delay_2_Sarah_Lab_6.wav,,,early_Lab6,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_early_delay_2_Sarah_Lab_7.wav,,,early_Lab7,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_early_delay_2_Sarah_Lab_8.wav,,,early_Lab8,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_late_delay_2_Sarah_Lab_1.wav,,,late_Lab1,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_late_delay_2_Sarah_Lab_2.wav,,,late_Lab2,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_late_delay_2_Sarah_Lab_3.wav,,,late_Lab3,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_late_delay_2_Sarah_Lab_4.wav,,,late_Lab4,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_late_delay_2_Sarah_Lab_5.wav,,,late_Lab5,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_late_delay_2_Sarah_Lab_6.wav,,,late_Lab6,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_late_delay_2_Sarah_Lab_7.wav,,,late_Lab7,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_late_delay_2_Sarah_Lab_8.wav,,,late_Lab8,false,0.3
+text,"Please use earphones, earbuds or headphones for this study. Are you using any of them now?",center,36px,logistic_headphone1,,
+text,"Which of the following listening devices are you currently using? ",center,36px,logistic_headphone2,,
+text,"How noisy is your current environment? (1 = Little to no noise, 5 = Very noisy)",center,36px,logistics_noise,,
+audio,620ddeee49655b42f1242551_tone_Lab_8.wav,,,long_tone_8,false,0.3
+text,"What instrument(s) do you play (including vocal performance)? How long have you played each one? For examples: Guitar, 6 - 9 years old; Drum, 3 - 20 years old; Vocal, 18 - 20 years old",center,36px,musicbackground1,,
+text,"Have you taken any music courseworks? If so, what classes were you taking? How long have you taken them? For example: one quarter of music theory; three quarters of music history; one quarter of music appreciation.",center,36px,musicbackground2,,
+text,Please let us know anything about your musical experiences that you think is important but was not addressed in the previous two questions.,center,36px,musicbackground3,,
+audio,607affb9d112a7e23c03a96d_300ms_ontime_delay_2_Sarah_Lab_1.wav,,,ontime_Lab1,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_ontime_delay_2_Sarah_Lab_2.wav,,,ontime_Lab2,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_ontime_delay_2_Sarah_Lab_3.wav,,,ontime_Lab3,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_ontime_delay_2_Sarah_Lab_4.wav,,,ontime_Lab4,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_ontime_delay_2_Sarah_Lab_5.wav,,,ontime_Lab5,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_ontime_delay_2_Sarah_Lab_6.wav,,,ontime_Lab6,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_ontime_delay_2_Sarah_Lab_7.wav,,,ontime_Lab7,false,0.3
+audio,607affb9d112a7e23c03a96d_300ms_ontime_delay_2_Sarah_Lab_8.wav,,,ontime_Lab8,false,0.3
+audio,620ddeee49655b42f1242551_tone_Lab_1.wav,,,short_tone_1,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_1.wav,,,single_300ms_early_delay_2_tone_Lab_1,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_2.wav,,,single_300ms_early_delay_2_tone_Lab_2,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_3.wav,,,single_300ms_early_delay_2_tone_Lab_3,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_4.wav,,,single_300ms_early_delay_2_tone_Lab_4,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_5.wav,,,single_300ms_early_delay_2_tone_Lab_5,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_6.wav,,,single_300ms_early_delay_2_tone_Lab_6,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_7.wav,,,single_300ms_early_delay_2_tone_Lab_7,false,0.3
+audio,620ddeee49655b42f1242551_300ms_early_delay_2_tone_Lab_8.wav,,,single_300ms_early_delay_2_tone_Lab_8,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_1.wav,,,single_300ms_late_delay_2_tone_Lab_1,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_2.wav,,,single_300ms_late_delay_2_tone_Lab_2,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_3.wav,,,single_300ms_late_delay_2_tone_Lab_3,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_4.wav,,,single_300ms_late_delay_2_tone_Lab_4,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_5.wav,,,single_300ms_late_delay_2_tone_Lab_5,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_6.wav,,,single_300ms_late_delay_2_tone_Lab_6,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_7.wav,,,single_300ms_late_delay_2_tone_Lab_7,false,0.3
+audio,620ddeee49655b42f1242551_300ms_late_delay_2_tone_Lab_8.wav,,,single_300ms_late_delay_2_tone_Lab_8,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_1.wav,,,single_300ms_ontime_delay_2_tone_Lab_1,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_2.wav,,,single_300ms_ontime_delay_2_tone_Lab_2,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_3.wav,,,single_300ms_ontime_delay_2_tone_Lab_3,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_4.wav,,,single_300ms_ontime_delay_2_tone_Lab_4,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_5.wav,,,single_300ms_ontime_delay_2_tone_Lab_5,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_6.wav,,,single_300ms_ontime_delay_2_tone_Lab_6,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_7.wav,,,single_300ms_ontime_delay_2_tone_Lab_7,false,0.3
+audio,620ddeee49655b42f1242551_300ms_ontime_delay_2_tone_Lab_8.wav,,,single_300ms_ontime_delay_2_tone_Lab_8,false,0.3
+audio,607affb9d112a7e23c03a96d_stim347_songbird.wav,,,songbird,false,0.3
+text,"<p>Before we start the main experiment, let's do a quick test. In each trial, you will hear a tone. Your job is to respond whether this is a longer tone or shorter tone based on the examples, which will be played very soon. Press the corresponding key to indicate whether it is SHORTER or LONGER. If you are not sure, make your best guess. <br /><br />Let's listen to some examples!</p>",center,,EXP8b_PretestI,,
+text,"Now let's do some practice to get familiar with the real task. We will move on to the main task when you get most of them correct. If you aren't getting many correct, try listening more carefully.",center,,practiceI,,
+text,"<p>Before we start the main experiment, let's do a quick test. In each trial, you will hear a musical tone which is actually created from a speech sound.  The speech sounds used to create the tones were the words “lap” and “lab.” Your job is to respond whether your hear “Lap” or “Lab” based on the examples, which will be played very soon. Press the 'F' key if you hear the word shown on the left or press the 'J' key if you hear the word shown on the right of the screen. If you are not sure, please make your best guess. <br /><br />Let's listen to some examples!</p>",center,,EXP8c_PretestI,,
+text,"<p>Good job! Ok, let's move on to the real experiment now. <br /> <br /> You won't see or hear the feedback in the following session. It is VERY IMPORTANT that you pay attention to the last sound. Below are my final reminders. <br /><br /> (1) Use your keyboard to respond instead of using your mouse. <br />(2) DON'T THINK. Follow your first intuition to make response ASAP. You cannot get it correct by thinking. <br />(3) The total time will depend on your response time, so try to respond as fast as you can while still getting the right answers. <br />(4) This task is HARD, and thus requires your undivided attention, so please put away your phone or other distractors while doing this experiment. <br /><br /> That's all I have for you. Please try your best! Good luck.</p>",center,,PracticeBreak_finalreminder,,
+text,"The target tone in each series of tones were created from the words “lab” and “lap”. Did you perceive or “feel” them as being lab and lap, or did they just sound like musical tones that have nothing to do with words? Answer “Lab or Lap” or “Musical Tones” here and you will have a chance to describe more in the next question.",center,36px,debrief3,,
+text,"The previous question asked whether you perceive or “feel” the sound as being lab and lap, or musical tones. Please explain your answer to that question in more details.",center,36px,debrief4,,

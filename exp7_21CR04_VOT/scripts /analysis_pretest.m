@@ -1,0 +1,48 @@
+%% Calculate the proportion of judging as pa
+clear 
+close all
+clc
+nsub = 45; % s02 does not have 240 trials
+results = zeros(nsub,8);
+
+for sub = [1:21,23:32,34:nsub]
+    str='s0';
+    if sub>=10
+       str='s';
+    end
+    data_route=['/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Vowel_length/result/raw/' str sprintf('%d',sub) '_d'];
+%    data_route=['/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/VOTs/pilot2018/data/' str sprintf('%d',sub)];
+    cd (data_route);
+%    data = [str num2str(sub) '1test'];
+    data = [str num2str(sub) '_d1test'];
+
+    load (data);
+%if sub>=18 
+%    KB = 100; % 200: F for /ba/, J for /pa/ i.e. s01 - s17; 100: J for /ba/, F for /pa/ i.e. s18 - s29
+%else KB = 200;
+%end
+
+%VOT = [8.845,15.279,21.039,26.821,31.357,36.731,42.128,47.162];
+VOT = [1:8];
+% switch file_VOTs{1} % get the 6 VOTs used by the participants
+%     case 'VOT_1.wav'
+%          VOT = VOT(1:6);
+%     case 'VOT_2.wav'
+%          VOT = VOT(2:7);
+%     case 'VOT_3.wav' 
+%          VOT = VOT(3:8);
+% end
+
+numTrials = 30;
+    for v = 1:length(VOT)
+        ind = find((result(:,1) == v) & (result(:,3) == 200)); % percent of reporting /pa/
+        results (sub,v) = length(ind)/numTrials;
+    end
+end
+% figure;
+% plot(squeeze(results(sub,bt,:)),'o')  % data
+% hold on
+% plot(est','LineWidth',2) 
+
+results(2,:) = [];
+mean(results,2)

@@ -1,0 +1,64 @@
+﻿type,content,alignment,name,size,visible,delay
+text,"<p>Welcome! <br /> <br /> <br /> In this study, you will listen to a series of sounds and press keys to enter a response. It will take about 60 mins to finish this experiment. <br /> Please use earphones, earbuds or headphones while completing the task. Please adjust your volume to a comfortable sound level. <br />You will begin with a questionnaire asking about your listening devices and how noisy your current environment is.</p>",center,LandingWelcome,,,
+text,"How noisy is your current environment? (1 = Little to no noise, 5 = Very noisy)",center,logistics_noise,36px,,
+text,"<p> Okay! We are about to start the experiment. Below are my final reminders. <br /><br /> (1) Use your keyboard to respond instead of using your mouse. <br />(2) DON'T THINK. Follow your first intuition to make response ASAP. You cannot get it correct by thinking. <br />(3) The total time will depend on your response time, so try to respond as correct and fast as possible. <br />(4) This task is HARD, and thus requires your undivided attention, so please put away your phone or other distractors whlie doing this experiment. <br /><br /> That's all I have for you. Please try your best! Good luck.</ p>",center,Instruction_main,,,
+text,Congradulations! You've completed the main task. We just have a few important questions to ask you before you go...,center,Instruction_Q,,,
+text,"What language are you most comfortable with using? Who did you learn it from, and starting at what age? (Please be specific, for example, say Mandarin rather than Chinese; American English rather than English.) 
+
+ Example: <i>American English, parents, starting at birth</i>",center,DomLang,36px,,
+text,"<b>What language</b> are you NEXT most comfortable with using? <b>Who</b> did you learn it from, and starting at <b>what age</b>? (Please be specific, for example, say Mandarin rather than Chinese; American English rather than English.) 
+
+ Example: <i>Spanish, grandmother, starting at age 5</i>",center,NonDomLang,36px,,
+text,Please briefly list the language(s) you use in the following situations: at home; in dorm/apartment; while doing math in your head; while thinking; which one you would use for the rest of your life if you could pick just one. <i>Example response: Home: Spanish; Dorm: English; Math: English; Thinking: English; Rest of life: Italian.</i>,center,LangPrefs,36px,,
+text,Please answer these questions for the language you are most comfortable with.,center,DomLangQs,36px,,
+text,Please answer these questions for the language you are most comfortable with.,center,NonDomLangQs,,,
+text,Please select your gender,center,Gender,36px,,
+text,Please enter your age in years.,center,Age,36px,,
+text,What did you think the music experiment was about? Did you notice any recurring patterns?,center,debrief1,36px,,
+text,Did you change how you were answering at any time during the study? What did you change?,center,debrief2,36px,,
+text,Any other comments or observations about the study?,center,debrief3,36px,,
+text,"Are there any other languages that you speak or understand? Please describe them briefly here. 
+
+ Example: <i>understand Spanish from high school classes, speak a little Hindi with grandmother</i>",center,AnyOtherLang,36px,,
+text,"<p>In this session, you will hear either “Ba” or “Pa” sound on each trial. Press F key on the keyboard by your left index finger if you hear “Ba”. Press J key by your right index finger if you hear “Pa”. If you are not sure, please make the best guess as you can.</p>",center,DiscriminationI,,,
+text,"<p>In this session, you will hear either “Ba” or “Pa” sound on each trial. Press F key on the keyboard by your left index finger if you hear “Pa”. Press J key by your right index finger if you hear “Ba”. If you are not sure, please make the best guess as you can.</p>",center,DiscriminationI_reversekey,,,
+text,"<p>Now please read the instruction carefully for the following task. In each trial, you will hear a series of short tones followed by a speech sound. For this task, only pay attention to the speech sound. Your job is to respond whether you heard “Ba” or “Pa”. Press F key on the keyboard by your left index finger if you hear “Ba”. Press J key by your right index finger if you hear “Pa”. If you are not sure, please make the best guess as you can <br /><br />Let's listen to some examples!</p>",center,MainI,,,
+text,"<p>Now please read the instruction carefully for the following task. In each trial, you will hear a series of short tones followed by a speech sound. For this task, only pay attention to the speech sound. Your job is to respond whether you heard “Ba” or “Pa”. Press F key on the keyboard by your left index finger if you hear “Pa”. Press J key by your right index finger if you hear “Ba”. If you are not sure, please make the best guess as you can <br /><br />Let's listen to some examples!</p>",center,MainI_reversekey,,,
+text,Good job! Take a break.,center,Break,36px,,
+audio,300ms_early_delay_2_Emily_pa5_mono.wav,,early_pa1,,false,0.3
+audio,300ms_early_delay_2_Emily_pa6_mono.wav,,early_pa2,,false,0.3
+audio,300ms_early_delay_2_Emily_pa7_mono.wav,,early_pa3,,false,0.3
+audio,300ms_early_delay_2_Emily_pa8_mono.wav,,early_pa4,,false,0.3
+audio,300ms_early_delay_2_Emily_pa9_mono.wav,,early_pa5,,false,0.3
+audio,300ms_early_delay_2_Emily_pa10_mono.wav,,early_pa6,,false,0.3
+audio,300ms_early_delay_2_Emily_pa11_mono.wav,,early_pa7,,false,0.3
+audio,300ms_early_delay_2_Emily_pa12_mono.wav,,early_pa8,,false,0.3
+audio,300ms_ontime_delay_2_Emily_pa5_mono.wav,,ontime_pa1,,false,0.3
+audio,300ms_ontime_delay_2_Emily_pa6_mono.wav,,ontime_pa2,,false,0.3
+audio,300ms_ontime_delay_2_Emily_pa7_mono.wav,,ontime_pa3,,false,0.3
+audio,300ms_ontime_delay_2_Emily_pa8_mono.wav,,ontime_pa4,,false,0.3
+audio,300ms_ontime_delay_2_Emily_pa9_mono.wav,,ontime_pa5,,false,0.3
+audio,300ms_ontime_delay_2_Emily_pa10_mono.wav,,ontime_pa6,,false,0.3
+audio,300ms_ontime_delay_2_Emily_pa11_mono.wav,,ontime_pa7,,false,0.3
+audio,300ms_ontime_delay_2_Emily_pa12_mono.wav,,ontime_pa8,,false,0.3
+audio,300ms_late_delay_2_Emily_pa5_mono.wav,,late_pa1,,false,0.3
+audio,300ms_late_delay_2_Emily_pa6_mono.wav,,late_pa2,,false,0.3
+audio,300ms_late_delay_2_Emily_pa7_mono.wav,,late_pa3,,false,0.3
+audio,300ms_late_delay_2_Emily_pa8_mono.wav,,late_pa4,,false,0.3
+audio,300ms_late_delay_2_Emily_pa9_mono.wav,,late_pa5,,false,0.3
+audio,300ms_late_delay_2_Emily_pa10_mono.wav,,late_pa6,,false,0.3
+audio,300ms_late_delay_2_Emily_pa11_mono.wav,,late_pa7,,false,0.3
+audio,300ms_late_delay_2_Emily_pa12_mono.wav,,late_pa8,,false,0.3
+audio,Emily_pa5_mono.wav,,pa1,,false,0.3
+audio,Emily_pa6_mono.wav,,pa2,,false,0.3
+audio,Emily_pa7_mono.wav,,pa3,,false,0.3
+audio,Emily_pa8_mono.wav,,pa4,,false,0.3
+audio,Emily_pa9_mono.wav,,pa5,,false,0.3
+audio,Emily_pa10_mono.wav,,pa6,,false,0.3
+audio,Emily_pa11_mono.wav,,pa7,,false,0.3
+audio,Emily_pa12_mono.wav,,pa8,,false,0.3
+audio,stim68_cat_meowing.wav,,cat_meowing,,false,0.3
+audio,stim347_songbird.wav,,songbird,,false,0.3
+text,"Which of the following listening devices are you currently using? ",center,logistic_headphone2,36px,,
+text,"Please use earphones, earbuds or headphones for this study. Are you using any of them now?",center,logistic_headphone1,36px,,
+text,Do you consider yourself as a monolingual English speaker? e.g. Is English the only language that you can understand and speak?,center,logistic_monoling_Eng,36px,,

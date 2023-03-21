@@ -1,0 +1,63 @@
+﻿type,content,alignment,name,size,visible,delay
+text,"<p>Welcome! <br /> <br /> <br /> In this study, you will listen to a series of sounds and press keys to enter a response. It will take about 75 mins to finish this experiment. <br /> Please use a headphone while completing the task if you can. Please adjust your volume to a comfortable sound level. <br />You will begin with a questionnaire asking about your listening devices and how noisy your current environment is.</p>",center,LandingWelcome,,,
+text,"Now let's do some practice to get familiar with the real task. We will move on to the main task when you get most of them correct. If you aren't getting many correct, try listening more carefully.",center,Instruction_practice,,,
+text,"<p>Good job! Ok, let's move on to the real experiment now. <br /> <br /> You won't see or hear the feedback in the following session. It is VERY IMPORTANT that you remember to select whether the LAST tone feels longer or shorter.</p>",center,PracticeBreak,,,
+text,Good job! Take a break.,center,MainTaskBreak,36px,,
+text,"How noisy is your current environment? (1 = Little to no noise, 5 = Very noisy)",center,logistics_noise,36px,,
+text,Which of the following listening devices are you currently using?,center,logistic_headphone,36px,,
+text,Please select your gender,center,basic1,36px,,
+text,Please enter your age in years.,center,basic2,36px,,
+text,"What instrument(s) do you play (including vocal performance)? How long have you played each one? For examples: Guitar, 6 - 9 years old; Drum, 3 - 20 years old; Vocal, 18 - 20 years old",center,musicbackground1,36px,,
+text,"Have you taken any music courseworks? If so, what classes were you taking? How long have you taken them? For example: one quarter of music theory; three quarters of music history; one quarter of music appreciation.",center,musicbackground2,36px,,
+text,Please let us know anything about your musical experiences that you think is important but was not addressed in the previous two questions.,center,musicbackground3,36px,,
+text,"<p>Excellent! Now please read the instruction carefully for the following task. In each trial, you will hear a series of short tones followed by a longer tone. For this task, pay attention to the last tone. Your job is to respond whether the last tone feels shorter or longer, press the 'F' key if it is SHORTER or press the 'J' key if it is LONGER. If you are not sure, make your best guess. <br /><br />Let's listen to some examples!</p>",center,General_instruction,,,
+text,"<p> Below are my final reminders. <br /><br /> (1) Use your keyboard to respond instead of using your mouse. <br />(2) DON'T THINK. Follow your first intuition to make response ASAP. You cannot get it correct by thinking. <br />(3) The total time will depend on your response time, so try to respond as correct and fast as possible. <br />(4) This task is HARD, and thus requires your undivided attention, so please put away your phone or other distractors whlie doing this experiment. <br /><br /> That's all I have for you. Please try your best! Good luck.</ p>",center,Instruction_main,,,
+audio,single_300ms_delay_2_51.wav,,single_300ms_delay_2_51,,false,0.3
+audio,single_300ms_delay_2_52.wav,,single_300ms_delay_2_52,,false,0.3
+audio,single_300ms_delay_2_53.wav,,single_300ms_delay_2_53,,false,0.3
+audio,single_300ms_delay_2_54.wav,,single_300ms_delay_2_54,,false,0.3
+audio,single_300ms_delay_2_55.wav,,single_300ms_delay_2_55,,false,0.3
+audio,single_300ms_delay_2_56.wav,,single_300ms_delay_2_56,,false,0.3
+audio,single_300ms_delay_2_81.wav,,single_300ms_delay_2_81,,false,0.3
+audio,single_300ms_delay_2_82.wav,,single_300ms_delay_2_82,,false,0.3
+audio,single_300ms_delay_2_83.wav,,single_300ms_delay_2_83,,false,0.3
+audio,single_300ms_delay_2_84.wav,,single_300ms_delay_2_84,,false,0.3
+audio,single_300ms_delay_2_85.wav,,single_300ms_delay_2_85,,false,0.3
+audio,single_300ms_delay_2_86.wav,,single_300ms_delay_2_86,,false,0.3
+audio,single_300ms_delay_2_91.wav,,single_300ms_delay_2_91,,false,0.3
+audio,single_300ms_delay_2_92.wav,,single_300ms_delay_2_92,,false,0.3
+audio,single_300ms_delay_2_93.wav,,single_300ms_delay_2_93,,false,0.3
+audio,single_300ms_delay_2_94.wav,,single_300ms_delay_2_94,,false,0.3
+audio,single_300ms_delay_2_95.wav,,single_300ms_delay_2_95,,false,0.3
+audio,single_300ms_delay_2_96.wav,,single_300ms_delay_2_96,,false,0.3
+audio,single_300ms_short.wav,,single_300ms_short,,false,0.3
+audio,single_300ms_long.wav,,single_300ms_long,,false,0.3
+text,"<p>Excellent! Now please read the instruction carefully for the following task. In each trial, you will hear a series of short tones followed by a longer tone. For this task, pay attention to the last tone. Your job is to respond whether the last tone feels shorter or longer, press the 'J' key if it is SHORTER or press the 'F' key if it is LONGER. If you are not sure, make your best guess. <br /><br />Let's listen to four examples!</p>",center,General_instruction_reversekey,,,
+text,"<p>Before we start the main experiment, let's do a quick test. In each trial, you will hear a tone. Your job is to respond whether this is a longer tone or shorter tone based on the examples, which will be played very soon. Press the 'J' key if it is SHORT or press the 'F' key if it is LONG. If you are not sure, make your best guess. <br /><br />Let's listen to some examples!</p>",center,Pretest_instruction_reversekey,,,
+text,"<p>Before we start the main experiment, let's do a quick test. In each trial, you will hear a tone. Your job is to respond whether this is a longer tone or shorter tone based on the examples, which will be played very soon. Press the 'F' key if it is SHORT or press the 'J' key if it is LONG. If you are not sure, make your best guess. <br /><br />Let's listen to some examples!</p>",center,Pretest_instruction,,,
+text,"<p> Ok, let's do the quick test now. This will take less than 3 mins. </p>",center,PretestBreak,,,
+audio,short_tone_1.wav,,short_tone_1,,false,0.3
+audio,long_tone_6.wav,,long_tone_6,,false,0.3
+text,Congradulations! You've completed the main task. We just have a few important questions to ask you before you go...,center,Instruction_Q,36px,,
+audio,single_300ms_delay_4_51.wav,,single_300ms_delay_4_51,,false,0.3
+audio,single_300ms_delay_4_52.wav,,single_300ms_delay_4_52,,false,0.3
+audio,single_300ms_delay_4_53.wav,,single_300ms_delay_4_53,,false,0.3
+audio,single_300ms_delay_4_54.wav,,single_300ms_delay_4_54,,false,0.3
+audio,single_300ms_delay_4_55.wav,,single_300ms_delay_4_55,,false,0.3
+audio,single_300ms_delay_4_56.wav,,single_300ms_delay_4_56,,false,0.3
+audio,single_300ms_delay_4_81.wav,,single_300ms_delay_4_81,,false,0.3
+audio,single_300ms_delay_4_82.wav,,single_300ms_delay_4_82,,false,0.3
+audio,single_300ms_delay_4_83.wav,,single_300ms_delay_4_83,,false,0.3
+audio,single_300ms_delay_4_84.wav,,single_300ms_delay_4_84,,false,0.3
+audio,single_300ms_delay_4_85.wav,,single_300ms_delay_4_85,,false,0.3
+audio,single_300ms_delay_4_86.wav,,single_300ms_delay_4_86,,false,0.3
+audio,single_300ms_delay_4_91.wav,,single_300ms_delay_4_91,,false,0.3
+audio,single_300ms_delay_4_92.wav,,single_300ms_delay_4_92,,false,0.3
+audio,single_300ms_delay_4_93.wav,,single_300ms_delay_4_93,,false,0.3
+audio,single_300ms_delay_4_94.wav,,single_300ms_delay_4_94,,false,0.3
+audio,single_300ms_delay_4_95.wav,,single_300ms_delay_4_95,,false,0.3
+audio,single_300ms_delay_4_96.wav,,single_300ms_delay_4_96,,false,0.3
+text,Please select number 7.,center,attention_check_number,36px,,
+audio,beat.wav,,beat,,false,0.3
+audio,bag.wav,,bag,,false,0.3
+text,Is there anything else you would like us to know during this experiment?,center,basic3,36px,,

@@ -1,0 +1,34 @@
+﻿type,content,alignment,name,size,visible,delay
+text,<p>Welcome! <br /> <br /> <br /> This study involves two sessions in which you will listen to a series of sounds and press keys to enter a response. It will take about 40 mins to finish this experiment. <br /> Please use a headphone while completing the task if you can. Please adjust your volume to a comfortable sound level. <br />You will begin with a questionnaire asking about your listening devices and how noisy your current environment is.</p>,center,LandingWelcome,,,
+text,"Now let's do some practice to get familiar with the real task. If you aren't getting many correct, try listening more carefully.",center,Instruction_practice,,,
+text,"<p>Good job! Ok, let's move on to the real experiment now. <br /> <br /> You won't see or hear the feedback in the following session. It is VERY IMPORTANT that you remember to select whether the LAST tone is longer or shorter than the first tone.</p>",center,PracticeBreak,,,
+text,Good job! Take a break.,center,MainTaskBreak,36px,,
+text,"How noisy is your current environment? (1 = Little to no noise, 5 = Very noisy)",center,logistics_noise,36px,,
+text,Which of the following listening devices are you currently using?,center,logistic_headphone,36px,,
+text,Please select your gender,center,basic1,36px,,
+text,Please enter your age in years.,center,basic2,36px,,
+text,"What instrument(s) do you play (including vocal performance)? How long have you played each one? For examples: Guitar, 6 - 9 years old; Drum, 3 - 20 years old; Vocal, 18 - 20 years old",center,musicbackground1,36px,,
+text,"Have you taken any music courseworks? If so, what classes were you taking? How long have you taken them? For example: one quarter of music theory; three quarters of music history; one quarter of music appreciation.",center,musicbackground2,36px,,
+text,Please let us know anything about your musical experiences that you think is important but was not addressed in the previous two questions.,center,musicbackground3,36px,,
+text,"<p>In each trial, you will hear a series of short tones followed by two longer tones. For this task, pay attention to the longer tones at the end. Your job is to compare these longer tones and press the 'F' key if the last tone is SHORTER than the previous one or press the 'J' key if the last tone is LONGER than the previous one. If you are not sure, make your best guess. <br /><br />Let's listen to four examples!</p>",center,General_instruction,,,
+text,"<p> Below are my final reminders. <br /><br /> (1) Use your keyboard to respond instead of using your mouse. <br />(2) DON'T THINK. Follow your first intuition to make response ASAP. You cannot get it correct by thinking. <br />(3) The total time will depend on your response time, so try to respond as correct and fast as possible. <br />(4) This task requires your undivided attention, so please put away your phone or other distractors whlie doing this experiment. <br /><br /> That's all I have for you. Please try your best! Good luck.</ p>",center,Instruction_main,,,
+audio,300ms_delay_2_51.wav,,300ms_delay_2_51,,false,0.3
+audio,300ms_delay_2_52.wav,,300ms_delay_2_52,,false,0.3
+audio,300ms_delay_2_53.wav,,300ms_delay_2_53,,false,0.3
+audio,300ms_delay_2_54.wav,,300ms_delay_2_54,,false,0.3
+audio,300ms_delay_2_55.wav,,300ms_delay_2_55,,false,0.3
+audio,300ms_delay_2_56.wav,,300ms_delay_2_56,,false,0.3
+audio,300ms_delay_2_81.wav,,300ms_delay_2_81,,false,0.3
+audio,300ms_delay_2_82.wav,,300ms_delay_2_82,,false,0.3
+audio,300ms_delay_2_83.wav,,300ms_delay_2_83,,false,0.3
+audio,300ms_delay_2_84.wav,,300ms_delay_2_84,,false,0.3
+audio,300ms_delay_2_85.wav,,300ms_delay_2_85,,false,0.3
+audio,300ms_delay_2_86.wav,,300ms_delay_2_86,,false,0.3
+audio,300ms_delay_2_91.wav,,300ms_delay_2_91,,false,0.3
+audio,300ms_delay_2_92.wav,,300ms_delay_2_92,,false,0.3
+audio,300ms_delay_2_93.wav,,300ms_delay_2_93,,false,0.3
+audio,300ms_delay_2_94.wav,,300ms_delay_2_94,,false,0.3
+audio,300ms_delay_2_95.wav,,300ms_delay_2_95,,false,0.3
+audio,300ms_delay_2_96.wav,,300ms_delay_2_96,,false,0.3
+audio,300ms_short.wav,,300ms_short,,false,0.3
+audio,300ms_long.wav,,300ms_long,,false,0.3

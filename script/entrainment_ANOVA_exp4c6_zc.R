@@ -9,8 +9,8 @@ library(effsize)
 library(lsr)
 
 ## Load the data
-EXPtone = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4c/results/EXP4c_clean_n71.csv") 
-EXPspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp6_21CR03_Vowel_length/FF2021/results/EXP6_clean_n79.csv")
+EXPtone = read.csv("results/EXP4c_clean_n71.csv") 
+EXPspeech = read.csv("results/EXP6_clean_n79.csv")
 
 ## flag the overlapping subjects between EXP4 and EXP6
 overlapsubj = intersect(EXPtone$sub_id,EXPspeech$sub_id)
@@ -33,6 +33,7 @@ alldata = alldata %>%
   mutate(Explabel = as.factor(exp))
 
 ## Onset coding and reference 
+## SC: this shouldn't be necessary for ANOVAs, right? Just LMERs?
 alldata$fOnsetR = relevel(alldata$fOnset, ref="ontime") # make ontime condition the reference 
 alldata$fOnsetE = relevel(alldata$fOnset, ref="early") # make early condition the reference 
 alldata$OnsetNum=ifelse(alldata$fOnsetR=="early",-1,ifelse(alldata$fOnsetR=="ontime",0,1))
@@ -74,6 +75,8 @@ colnames(aovmeans)[1] = 'Shorter'
 aovmeans$outliers_slope = ifelse(aovmeans$slope>= 0 | aovmeans$sub_id == 'af90a',1,0)
 outliers_slope_subj = filter(aovmeans,outliers_slope==1)
 aovmeans_clean1 = filter(aovmeans, !(sub_id %in% unique(outliers_slope_subj$sub_id)))
+length(unique(outliers_slope_subj$sub_id)) # ?? subjects dropped
+length(unique(outliers_slope_subj$sub_id))/length(unique(aovmeans_clean1$sub_id)) #...
 
 ## flag outliers based on 50% point 
 # plot the histogram
@@ -91,6 +94,10 @@ aovmeans_clean1$outliers_50 = ifelse(aovmeans_clean1$fifty < (q1 - 1.5*iqr) | ao
 outliers_subj_50 = filter(aovmeans_clean1,outliers_50==1)
 aovmeans_clean2 = filter(aovmeans_clean1, !(sub_id %in% unique(outliers_subj_50$sub_id)))
 hist(aovmeans_clean2$fifty,200)
+max(dim(aovmeans_clean2))/max(dim(aovmeans_clean1)) # 84.7% data retained--SCC
+length(unique(outliers_subj_50$sub_id)) # ?? subjects dropped
+length(unique(outliers_subj_50$sub_id))/length(unique(aovmeans_clean1$sub_id)) # further ??% dropped here
+
 
 # Descriptive stats
 aovmeans_clean2 %>%
@@ -126,10 +133,10 @@ ggplot(aovdata_clean,aes(x=rLength,y=Shorter,color=fOnsetR))+
   scale_color_manual(values=c("red","green","blue"))+
   geom_point()+
   # geom_line()+
-#  geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
-#  geom_smooth(method="lm",se=FALSE) +
+  #  geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
+  #  geom_smooth(method="lm",se=FALSE) +
   geom_smooth(method="glm",method.args = list(family = "binomial"),se=FALSE) +
-  facet_wrap(sub_id~.)
+  facet_wrap(Explabel~sub_id) # SCC added Explabel to see who's in what cond
 
 ## relabel Speech to EXP8a and Tone to EXP8b and 
 aovmeans_clean2$Explabel = ifelse(aovmeans_clean2$Explabel == "EXP6","Speech","Tones")
@@ -153,7 +160,7 @@ length(unique(exp8b$sub_id))
 
 ## ANOVA on proportion short
 m = summary(aov(Shorter~fOnsetR*Explabel+Error(sub_id/fOnsetR),data=aovmeans_clean2)) 
-# calculate partial generalized eta sq https://www.aggieerin.com/shiny-server/tests/gesmixss.html and based on Olejnik & Algina (2003)
+# calculate partial generalized eta sq https://urldefense.com/v3/__https://www.aggieerin.com/shiny-server/tests/gesmixss.html__;!!Mih3wA!GIruiklcnAtbDdh8RrFHDsNw9ZBmCPmEtvlvelVk8J7iSlh5lPOnaepdVA3Zxa8KQYQuahfqgn7UcGWE$  and based on Olejnik & Algina (2003)
 m$'Error: sub_id'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]) # Target
 m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]) # Onset
 m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[2]/(m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[2]+m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]+m$'Error: sub_id'[[1]]$`Sum Sq`[1]) # Onset*Target
@@ -197,7 +204,7 @@ p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
 ## ANOVA on 50% point
 m = summary(aov(fifty~fOnsetR*Explabel+Error(sub_id/fOnsetR),data=aovmeans_clean2)) 
-# calculate partial generalized eta sq https://www.aggieerin.com/shiny-server/tests/gesmixss.html and based on Olejnik & Algina (2003)
+# calculate partial generalized eta sq https://urldefense.com/v3/__https://www.aggieerin.com/shiny-server/tests/gesmixss.html__;!!Mih3wA!GIruiklcnAtbDdh8RrFHDsNw9ZBmCPmEtvlvelVk8J7iSlh5lPOnaepdVA3Zxa8KQYQuahfqgn7UcGWE$  and based on Olejnik & Algina (2003)
 m$'Error: sub_id'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]) # Target
 m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]) # Onset
 m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[2]/(m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[2]+m$'Error: sub_id:fOnsetR'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]+m$'Error: sub_id'[[1]]$`Sum Sq`[1]) # Onset*Target

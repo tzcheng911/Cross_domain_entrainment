@@ -7,12 +7,12 @@ library('fastDummies')
 
 ## Load the data
 # mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/Delaydoesmatter/real_exp/exp2/data_analysis/Rdata/exp2_PPS_n48.csv") # exp2
-mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/Delaydoesmatter/real_exp/exp3_20CR11/results/EXP3_clean_n34.csv") # exp3
-mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortdelay_2020/EXP4a_clean_n53.csv") # exp4a
-mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortlongdelay_2021/EXP4b_clean_n67.csv") # exp4b
-mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/Delaydoesmatter/real_exp/exp4_20CR12/4c/results/EXP4c_clean_n59.csv") # exp4c
-mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/Delaydoesmatter/real_exp/exp5_21CR01/results/EXP5_clean_n24_e.csv") # exp5 empty
-mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/Delaydoesmatter/real_exp/exp5_21CR01/results/EXP5_clean_n24_f.csv") # exp5 filled
+mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp3_20CR11/results/EXP3_clean_n34.csv") # exp3
+mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortdelay_2020/EXP4a_clean_n53.csv") # exp4a
+mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortlongdelay_2021/EXP4b_clean_n67.csv") # exp4b
+mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4c/results/EXP4c_clean_n59.csv") # exp4c
+mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp5_21CR01/results/EXP5_clean_n24_e.csv") # exp5 empty
+mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp5_21CR01/results/EXP5_clean_n24_f.csv") # exp5 filled
 mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp6_21CR03_Vowel_length/FF2021/results/EXP6_clean_n64.csv") # exp6 VL
 
 str(mydata) #data inspection, you should see that all the variables are "int" they need to be centered and scaled

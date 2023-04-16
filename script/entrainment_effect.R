@@ -12,7 +12,7 @@ mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainme
 mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortlongdelay_2021/EXP4b_clean_n67.csv") # exp4b
 mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4c/results/EXP4c_clean_n59.csv") # exp4c
 mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp5_21CR01/results/EXP5_clean_n24_e.csv") # exp5 empty
-mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp5_21CR01/results/EXP5_clean_n24_f.csv") # exp5 filled
+mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp5_21CR01/results/EXP5_clean_n21_f.csv") # exp5 filled
 mydata = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp6_21CR03_Vowel_length/FF2021/results/EXP6_clean_n64.csv") # exp6 VL
 
 str(mydata) #data inspection, you should see that all the variables are "int" they need to be centered and scaled
@@ -20,10 +20,10 @@ str(mydata) #data inspection, you should see that all the variables are "int" th
 ############################ standardize the input to the model ###########################
 ## may need to change some variable name
 
-# mydata = mydata %>%
-#  mutate(Onset =case_when(Onset == 5 ~ "Early", Onset == 8 ~ "Ontime", Onset == 9 ~ "Late"))
-# mydata = mydata %>%
-  # mutate(nresponse_value =case_when(response_value == "Longer" ~ 0, response_value == "Shorter" ~1))
+mydata = mydata %>%
+  mutate(Onset =case_when(onset == 5 ~ "Early", onset == 8 ~ "Ontime", onset == 9 ~ "Late"))
+mydata = mydata %>%
+  mutate(nresponse_value =case_when(response_value == "Longer" ~ 0, response_value == "Shorter" ~1))
 mydata = mydata %>%
   mutate(nresponse_value = Shorter)
 ## Rescale and re-reference
@@ -31,7 +31,7 @@ mydata = mydata %>%
   mutate(rLength = scale(Length, center = TRUE, scale = TRUE)) # scale the steps 
 mydata = mydata %>%
   mutate(fOnset = as.factor(Onset))
-mydata$fOnsetR = relevel(mydata$fOnset, ref="ontime") # make ontime condition the reference 
+mydata$fOnsetR = relevel(mydata$fOnset, ref="Ontime") # make ontime condition the reference 
 
 ############################ glm model with onset coded as Early, ontime, late run for each experiment ###########################
 lm = glmer(nresponse_value ~ fOnsetR + rLength + fOnsetR:rLength + (1 + fOnsetR + rLength + fOnsetR:rLength|participant_id),data= mydata,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
@@ -44,7 +44,16 @@ all_conds_mean_pps <- mydata %>%
   summarise(PPS = mean(Shorter))
 PPS <- all_conds_mean_pps %>% 
   group_by(onset) %>% 
-  summarise(PPS = mean(PPS))
+  summarise(PPS = sd(PPS))
+PPS
+
+# for exp4a
+all_conds_mean_pps <- mydata %>% 
+  group_by(participant_id,Onset,Length) %>% 
+  summarise(PPS = mean(nresponse_value))
+PPS <- all_conds_mean_pps %>% 
+  group_by(Onset) %>% 
+  summarise(PPS = sd(PPS))
 PPS
 
 all_conds_mean_pps$sub_id = as.factor(all_conds_mean_pps$sub_id)

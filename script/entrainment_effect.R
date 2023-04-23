@@ -26,9 +26,15 @@ mydata = mydata %>%
   mutate(nresponse_value =case_when(response_value == "Longer" ~ 0, response_value == "Shorter" ~1))
 mydata = mydata %>%
   mutate(nresponse_value = Shorter)
+# for exp4a
+##mydata = mydata %>%
+  #mutate(Shorter = nresponse_value)
+#mydata = mydata %>%
+ # mutate(sub_id =participant_id)
+
 ## Rescale and re-reference
 mydata = mydata %>%
-  mutate(rLength = scale(Length, center = TRUE, scale = TRUE)) # scale the steps 
+  mutate(rLength = scale(comparison, center = TRUE, scale = TRUE)) # scale the steps 
 mydata = mydata %>%
   mutate(fOnset = as.factor(Onset))
 mydata$fOnsetR = relevel(mydata$fOnset, ref="Ontime") # make ontime condition the reference 
@@ -49,7 +55,7 @@ PPS
 
 # for exp4a
 all_conds_mean_pps <- mydata %>% 
-  group_by(participant_id,Onset,Length) %>% 
+  group_by(sub_id,Onset,comparison) %>% 
   summarise(PPS = mean(nresponse_value))
 PPS <- all_conds_mean_pps %>% 
   group_by(Onset) %>% 

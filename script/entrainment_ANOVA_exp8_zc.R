@@ -38,7 +38,7 @@ alldata$OnsetHelm2=ifelse(alldata$fOnsetR=="early",0,ifelse(alldata$fOnsetR=="on
 
 ## sort the data to be subjects x onset for each experiment
 aovdata=alldata %>% #filter(comparison>=6) %>% ### if you limit speech to continua 1-5, no diffs. strong for 6-8
-  group_by(fOnsetR,Explabel,OnsetNum,rLength,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
+  group_by(fOnsetR,Explabel,OnsetNum,Length,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
 
 ## Very slow!!!!!!!
 # ggplot(aovdata,aes(x=rLength,y=Shorter,color=fOnsetR))+
@@ -52,7 +52,7 @@ aovdata=alldata %>% #filter(comparison>=6) %>% ### if you limit speech to contin
 # run logistic fit on each subject and condition
 aovmeans=aovdata %>% 
   group_by(sub_id,fOnsetR,Explabel) %>% 
-  do(glmfit = glm(Shorter ~ rLength,data =.,family=binomial())) 
+  do(glmfit = glm(Shorter ~ Length,data =.,family=binomial())) 
 
 # get the coefficients 
 aovmeans = aovmeans %>%
@@ -103,16 +103,9 @@ aovdata_clean$Explabel = factor(aovdata_clean$Explabel, levels = c("EXP8a","EXP8
 aovdata_outlier_slope$Explabel = factor(aovdata_outlier_slope$Explabel, levels = c("EXP8a","EXP8b","EXP8c"))
 aovdata_outlier_50$Explabel = factor(aovdata_outlier_50$Explabel, levels = c("EXP8a","EXP8b","EXP8c"))
 
-
 aovdata_clean_plot = aovdata_clean %>% group_by(rLength,fOnsetR,Explabel) %>% summarise(mShorter=mean(Shorter),SD=sd(Shorter),Nsubs=n_distinct(sub_id))
 aovdata_clean_plot$fOnsetR = factor(aovdata_clean_plot$fOnsetR, levels = c("early","ontime","late"))
 aovdata_clean_plot$Explabel = factor(aovdata_clean_plot$Explabel, levels = c("EXP8a","EXP8b","EXP8c"))
-
-ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=Explabel))+
-  geom_point()+
-  geom_line()+
-  geom_errorbar(aes(ymin=mShorter-SD/sqrt(Nsubs),ymax=mShorter+SD/sqrt(Nsubs)),width=0)#+
-  facet_grid(fOnsetR~.)
 
 ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetR,linetype=Explabel,group=interaction(fOnsetR,Explabel)))+
   geom_point()+
@@ -126,7 +119,7 @@ ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetR,linetype=Explab
 # c = filter(aovdata_clean_plot,fOnsetR == "ontime" & Explabel == "EXP8c" & abs(rLength) > 1.52)
 
 # Very slow!!! individual plot for clean data
-ggplot(aovdata_outlier_50,aes(x=Length,y=Shorter,color=fOnsetR,shape=Explabel))+
+ggplot(aovdata_clean,aes(x=Length,y=Shorter,color=fOnsetR,shape=Explabel))+
   scale_color_manual(values=c("red","green","blue"))+
   geom_point()+
   # geom_line()+

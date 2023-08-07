@@ -153,8 +153,32 @@ length(unique(exp8a$sub_id))
 length(unique(exp8b$sub_id))
 length(unique(exp8c$sub_id))
 
-## ANOVA on pretest
-## ttest on pretest
+## Descriptive stats of pretests
+# rescale the Length
+EXPspeech_pre = EXPspeech_pre %>%
+  mutate(rLength = scale(Length, center = TRUE, scale = TRUE)) # scale the steps ## 4c: scale Length; 6: scale comparison
+EXPspeech_disc = EXPspeech_disc %>%
+  mutate(rLength = scale(Length, center = TRUE, scale = TRUE)) # scale the steps ## 4c: scale Length; 6: scale comparison
+
+# average across trials 
+prescreen = EXPspeech_pre%>%
+  group_by(sub_id,Length) %>%
+  summarize(ShorterM = mean(Shorter))
+
+discrimination = EXPspeech_disc%>%
+  group_by(sub_id,rLength) %>%
+  summarize(ShorterM = mean(Shorter))
+
+## ANOVA on pretest discrimination lap/lab continuum
+m = summary(aov(ShorterM~rLength+Error(sub_id/rLength),data=discrimination)) 
+
+## ttest on pretest of prescreen 6 endpoints pair
+p = t.test(filter(prescreen,Length == 1)$ShorterM,filter(prescreen,Length == 8)$ShorterM,paired=T)
+p 
+cohen.d(filter(prescreen,Length == 1)$ShorterM,filter(prescreen,Length == 8)$ShorterM,paired=T)
+
+cohen.d(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetR=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetR=="ontime")$Shorter,paired=T)
+p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
 ## ANOVA on proportion short
 m = summary(aov(Shorter~fOnsetR*Explabel+Error(sub_id/fOnsetR),data=aovmeans_clean2)) 

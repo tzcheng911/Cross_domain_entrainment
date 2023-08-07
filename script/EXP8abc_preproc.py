@@ -33,7 +33,7 @@ print('catch_threshold: ', args.catch_threshold)
 print('RT_threshold: ', args.RT_threshold)
 
 ## Load data
-# path_to_data = "/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/"
+# path_to_data = "/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/"
 path_to_data = args.path
 os.chdir(path_to_data)
 df = pd.read_csv("combined_csv.csv")
@@ -148,6 +148,20 @@ if which_exp == "EXP8a":
     df_discriminate = df_clean[(df_clean['task'] == "DiscriminationTrials")].reset_index()
     df_prescreen.groupby(['stimuli_presented'])['Shorter'].mean()
     df_discriminate.groupby(['stimuli_presented'])['Shorter'].mean()
+    ## Code the shorter stimuli e.g. back, beat, lack as 1 andl onger stimuli as 8
+    length = []
+    for i in np.arange(0,len(df_prescreen)):
+        if df_prescreen['stimuli_presented'][i] in Shorter_stimuli:
+            length.append(1)
+        else:
+            length.append(8)
+    df_prescreen['Length'] = length
+    ## Code the lap/lab continuum from 1 to 8 (Lap to Lab)
+    length = []
+    for i in np.arange(0,len(df_discriminate)):
+        length.append(df_discriminate['stimuli_presented'][i][-1])
+    df_discriminate['Length'] = length
+
     df_prescreen.to_csv(path_to_data+which_exp+"_prescreen_clean_n" + str(n_subj) +".csv", header=True)
     df_discriminate.to_csv(path_to_data+which_exp+"_discrimination_clean_n" + str(n_subj) +".csv", header=True)
 

@@ -15,6 +15,8 @@ EXPspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrai
 EXPtoneasspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8c_clean_n88.csv") 
 EXPtoneasspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8c-s_clean_n20.csv") 
 EXPtoneasspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/EXP8c-s_clean_n34.csv") 
+EXPspeech_pre = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8a_prescreen_clean_n80.csv")
+EXPspeech_disc = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8a_discrimination_clean_n80.csv")
 
 alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXPspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),
               select(EXPtoneasspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct))
@@ -27,7 +29,7 @@ alldata = alldata %>%
 alldata = alldata %>%
   mutate(Explabel = as.factor(exp))
 
-## Onset coding and reference 
+## Onset coding and reference
 alldata$fOnsetR = relevel(alldata$fOnset, ref="ontime") # make ontime condition the reference 
 alldata$fOnsetE = relevel(alldata$fOnset, ref="early") # make early condition the reference 
 alldata$OnsetNum=ifelse(alldata$fOnsetR=="early",-1,ifelse(alldata$fOnsetR=="ontime",0,1))
@@ -150,6 +152,9 @@ exp8c = filter(aovmeans_clean2,Explabel == "ToneasSpeech")
 length(unique(exp8a$sub_id))
 length(unique(exp8b$sub_id))
 length(unique(exp8c$sub_id))
+
+## ANOVA on pretest
+## ttest on pretest
 
 ## ANOVA on proportion short
 m = summary(aov(Shorter~fOnsetR*Explabel+Error(sub_id/fOnsetR),data=aovmeans_clean2)) 

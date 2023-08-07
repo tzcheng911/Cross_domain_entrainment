@@ -46,7 +46,6 @@ df = pd.read_csv("combined_csv.csv")
 
 ## Define parameters 
 # which_exp = input ("Enter EXP8a, EXP8b or EXP8c:")
-# threshold = .55
 # catch_threshold = .9
 # RT_threshold = 10000
 which_exp = args.exp
@@ -65,13 +64,14 @@ print("How many subjects collected in this exp:", len(df['participant_id'].uniqu
 
 ## Add the accuracy and PPS column to the dataset: transform True and Shorter to 1, False and longer to 0
 Correct = [] # only applied for the prescreen
+Shorter_stimuli = ['Shorter','Back','Beat','Cap','Fat','Lack','Lap']
 Shorter = []
 for i in np.arange(0,len(df)):
-    if df['response_correct'][i] == True:
+    if df['response_correct'][i] == True or df['stimuli_presented'][i] == df['response_value'][i]:
         Correct.append(1)
     else: 
         Correct.append(0)
-    if ((df['response_value'][i] == "Lap") or (df['response_value'][i] == "Shorter")): 
+    if df['response_value'][i] in Shorter_stimuli: 
         Shorter.append(1)
     else: 
         Shorter.append(0)
@@ -141,6 +141,15 @@ print('Participant_number:', n_subj,'Trial number:', n_trial,'Condition number:'
 # - Pretest trails (n = 60): single tone 1 or 8
 # - Practice trials (n = 24 or 36): 6 context tones + 1 ontime single tone 1 or 8 with correct/incorrect feedback
 # - Main task (n = 576): 6 context tones + 1 single tone (early, ontime, late; 1 to 8 steps) without feedback
+
+# ### Select the prescreen and discrimination trials for EXP8a
+if which_exp == "EXP8a":
+    df_prescreen = df_clean[(df_clean['task'] == "PrescreenTrials")].reset_index()
+    df_discriminate = df_clean[(df_clean['task'] == "DiscriminationTrials")].reset_index()
+    df_prescreen.groupby(['stimuli_presented'])['Shorter'].mean()
+    df_discriminate.groupby(['stimuli_presented'])['Shorter'].mean()
+    df_prescreen.to_csv(path_to_data+which_exp+"_prescreen_clean_n" + str(n_subj) +".csv", header=True)
+    df_discriminate.to_csv(path_to_data+which_exp+"_discrimination_clean_n" + str(n_subj) +".csv", header=True)
 
 # ### Select the pretest trials 
 df_pre = df_clean[(df_clean['task'] == "PretestTrials")].reset_index()

@@ -159,6 +159,8 @@ EXPspeech_pre = EXPspeech_pre %>%
   mutate(rLength = scale(Length, center = TRUE, scale = TRUE)) # scale the steps ## 4c: scale Length; 6: scale comparison
 EXPspeech_disc = EXPspeech_disc %>%
   mutate(rLength = scale(Length, center = TRUE, scale = TRUE)) # scale the steps ## 4c: scale Length; 6: scale comparison
+EXPspeech_pre$rLength=as.factor(EXPspeech_pre$rLength)
+EXPspeech_disc$rLength=as.factor(EXPspeech_disc$rLength)
 
 # average across trials 
 prescreen = EXPspeech_pre%>%
@@ -166,11 +168,22 @@ prescreen = EXPspeech_pre%>%
   summarize(ShorterM = mean(Shorter))
 
 discrimination = EXPspeech_disc%>%
-  group_by(sub_id,rLength) %>%
+  group_by(sub_id,Length) %>%
   summarize(ShorterM = mean(Shorter))
 
+discriminationM = discrimination%>%
+  group_by(Length) %>%
+  summarize(ShorterM = mean(ShorterM))
+
+ggplot(discrimination, aes(x = Length, y = ShorterM)) +
+  geom_point(position = 'jitter') +
+  geom_bar(data = discriminationM, stat = "identity", alpha = .3)
+
+ggplot(discrimination, aes(x = rLength, y = ShorterM, fill=rLength)) +
+  geom_violin()
+
 ## ANOVA on pretest discrimination lap/lab continuum
-m = summary(aov(ShorterM~rLength+Error(sub_id/rLength),data=discrimination)) 
+m = summary(aov(ShorterM~Length+Error(sub_id/Length),data=discrimination)) 
 
 ## ttest on pretest of prescreen 6 endpoints pair
 p = t.test(filter(prescreen,Length == 1)$ShorterM,filter(prescreen,Length == 8)$ShorterM,paired=T)

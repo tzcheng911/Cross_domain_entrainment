@@ -154,6 +154,14 @@ length(unique(exp8b$sub_id))
 length(unique(exp8c$sub_id))
 
 ## Descriptive stats of pretests
+# exclude outliers as identified from the main task 
+outliers1 = filter(outliers_subj_50,Explabel == "EXP8a")
+outliers2 = filter(outliers_slope_subj,Explabel == "EXP8a")
+outliers = rbind(select(outliers1,sub_id),select(outliers2,sub_id))
+
+EXPspeech_pre = filter(EXPspeech_pre, !(sub_id %in% unique(outliers$sub_id)))
+EXPspeech_disc = filter(EXPspeech_disc, !(sub_id %in% unique(outliers$sub_id)))
+
 # rescale the Length
 EXPspeech_pre = EXPspeech_pre %>%
   mutate(rLength = scale(Length, center = TRUE, scale = TRUE)) # scale the steps ## 4c: scale Length; 6: scale comparison
@@ -164,15 +172,15 @@ EXPspeech_disc$rLength=as.factor(EXPspeech_disc$rLength)
 
 # average across trials 
 prescreen = EXPspeech_pre%>%
-  group_by(sub_id,Length) %>%
+  group_by(sub_id,rLength) %>%
   summarize(ShorterM = mean(Shorter))
 
 discrimination = EXPspeech_disc%>%
-  group_by(sub_id,Length) %>%
+  group_by(sub_id,rLength) %>%
   summarize(ShorterM = mean(Shorter))
 
 discriminationM = discrimination%>%
-  group_by(Length) %>%
+  group_by(rLength) %>%
   summarize(ShorterM = mean(ShorterM))
 
 ggplot(discrimination, aes(x = Length, y = ShorterM)) +
@@ -183,15 +191,19 @@ ggplot(discrimination, aes(x = rLength, y = ShorterM, fill=rLength)) +
   geom_violin()
 
 ## ANOVA on pretest discrimination lap/lab continuum
-m = summary(aov(ShorterM~Length+Error(sub_id/Length),data=discrimination)) 
+m = summary(aov(ShorterM~rLength+Error(sub_id/rLength),data=discrimination)) 
+m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[2])
 
 ## ttest on pretest of prescreen 6 endpoints pair
 p = t.test(filter(prescreen,Length == 1)$ShorterM,filter(prescreen,Length == 8)$ShorterM,paired=T)
 p 
 cohen.d(filter(prescreen,Length == 1)$ShorterM,filter(prescreen,Length == 8)$ShorterM,paired=T)
-
-cohen.d(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetR=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetR=="ontime")$Shorter,paired=T)
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
+
+## ANOVA on Length x Onset in Speech condition
+aovdata_clean$rLength = factor(aovdata_clean$rLength)
+m = summary(aov(Shorter~fOnsetR*rLength+Error(sub_id/(fOnsetR*rLength)),data = filter(aovdata_clean,Explabel=="EXP8a")))
+m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[2]) # rLength
 
 ## ANOVA on proportion short
 m = summary(aov(Shorter~fOnsetR*Explabel+Error(sub_id/fOnsetR),data=aovmeans_clean2)) 

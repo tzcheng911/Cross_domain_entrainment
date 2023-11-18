@@ -3,6 +3,7 @@
 % Modified 2023/10 for exp8 speech modified tone stimuli (upper and lower env)
 
 clear 
+close all
 clc
 addpath('/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/script')
 %% Create single speech modified tone for each lab-lap step: just the upper envelope
@@ -48,13 +49,13 @@ for i = 1:length(allspeech)
     speech_r = abs(speech);
     
     % Traditional rectified speech
-    [env_up,env_lo] = envelope(speech_r,45,'rms'); % only the upper envelope
+    [env_up,env_lo] = envelope(speech_r,200,'peak'); % only the upper envelope
     env_avg = 0.5*(env_up+(-1*env_lo));
     % env_up(env_up < 0) = 0; % force the envelope >=0
     mod_pure_tone = pure_tone(:).*env_avg(:);    
     
     audiowrite(strcat('avg_env_tone_',name(2:end)),mod_pure_tone,fs)
-    audiowrite(strcat('origina_speech_',name(2:end)),speech,fs)
+    audiowrite(strcat('speech_',name(2:end)),speech,fs)
 end
 
 %% Visualize the env

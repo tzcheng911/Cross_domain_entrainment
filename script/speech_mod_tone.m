@@ -48,13 +48,36 @@ for i = 1:length(allspeech)
     speech_r = abs(speech);
     
     % Traditional rectified speech
-    [env_up,~] = envelope(speech_r,200,'peak'); % only the upper envelope
+    [env_up,env_lo] = envelope(speech_r,45,'rms'); % only the upper envelope
     env_up(env_up < 0) = 0; % force the envelope >=0
     mod_pure_tone = pure_tone(:).*env_up(:);    
     
-    audiowrite(strcat('rect_tone_',name(2:end)),mod_pure_tone,fs)
+    audiowrite(strcat('avg_env_tone_',name(2:end)),mod_pure_tone,fs)
     audiowrite(strcat('speech_',name(2:end)),speech,fs)
 end
+
+%% Visualize the env
+[speech,fs] = audioread('a1.wav');
+[tone,fs] = audioread('rect_tone_1.wav');
+
+speech_r = abs(speech);
+[env_r_speech,~] = envelope(speech_r,200,'peak'); % only the upper envelope
+env_r_speech(env_r_speech < 0) = 0; % force the envelope >=0
+
+[env_up,env_lo] = envelope(tone,200,'peak'); 
+env_up(env_up < 0) = 0; % force the upper envelope >=0
+env_lo(env_lo > 0) = 0; % force the lower envelope <=0
+
+figure;plot(speech)
+hold on;plot(env_r_speech,'LineWidth',2,'color','k')
+hold on;plot(-env_r_speech,'LineWidth',2,'color','k')
+hold on;plot(env_up,'red','LineWidth',2,'LineStyle','--')
+hold on;plot(env_lo,'red','LineWidth',2,'LineStyle','--')
+legend('Speech sound','Rect speech env','-Rect speech env','Tone up env','Tone low env')
+xlim([0 length(tone)])
+xlabel('Time (sample)')
+ylabel('Amplitude')
+title('Step 1')
 
 %% Create single speech modified tone for each add-at step: both upper and lower envelope
 % drawback: additional harmonics

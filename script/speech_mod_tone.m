@@ -49,11 +49,12 @@ for i = 1:length(allspeech)
     
     % Traditional rectified speech
     [env_up,env_lo] = envelope(speech_r,45,'rms'); % only the upper envelope
-    env_up(env_up < 0) = 0; % force the envelope >=0
-    mod_pure_tone = pure_tone(:).*env_up(:);    
+    env_avg = 0.5*(env_up+(-1*env_lo));
+    % env_up(env_up < 0) = 0; % force the envelope >=0
+    mod_pure_tone = pure_tone(:).*env_avg(:);    
     
     audiowrite(strcat('avg_env_tone_',name(2:end)),mod_pure_tone,fs)
-    audiowrite(strcat('speech_',name(2:end)),speech,fs)
+    audiowrite(strcat('origina_speech_',name(2:end)),speech,fs)
 end
 
 %% Visualize the env

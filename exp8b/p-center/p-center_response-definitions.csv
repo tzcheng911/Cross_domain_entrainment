@@ -1,4 +1,0 @@
-﻿type,choices,name,key_mapping,target,instruction,feedback,required,multi_select,wrap,layout
-choice,"[""In time"",""Out of time""]",exampleRsp_tone,"[""F"",""J""]",Out of time,The metronome sound is out of time relative to the tone. Please press the [Out of time] button.,TRUE,,,,
-choice,"[""In time"",""Out of time""]",exampleRsp_lab,"[""F"",""J""]",Out of time,The metronome sound is out of time relative to the speech. Please press the [Out of time] button.,TRUE,,,,
-choice,"[""In time"",""Out of time""]",testRsp,"[""F"",""J""]",,Is the metronome sound in time or out of time?,FALSE,,,,

@@ -1,6 +1,8 @@
 %% 
 % Created 2022/2 for exp4c speech modified tone stimuli
 % Modified 2023/10 for exp8 speech modified tone stimuli (upper and lower env)
+% Modified 2023/11 for exp8b speech modified tone stimuli (upper and lower env)
+
 
 clear 
 clc
@@ -119,8 +121,9 @@ context = repmat(context_tone,1,6);
 begin_time = {'early','ontime','late'}; % correspond to early(1), ontime(2), late(3) beginning
 delay_dur = {'2'}; 
 
-cd('/Users/t.z.cheng/Google_Drive/Research/Delaydoesmatter/real_exp/exp4_20CR12/4c/stimuli')
-allmtones = dir('tone*');
+% cd('/Users/t.z.cheng/Google_Drive/Research/Delaydoesmatter/real_exp/exp4_20CR12/4c/stimuli')
+cd('/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8b/stimuli/official_stimuli/avg_env_tone_target_85db')
+allmtones = dir('avg*');
 for i = 1:length(allmtones)
     name = allmtones(i).name;
     [mtone,fs] = audioread(name);

@@ -35,7 +35,7 @@ print('RT_threshold: ', args.RT_threshold)
 ## Load data
 path_to_data = args.path
 os.chdir(path_to_data)
-df = pd.read_csv("EXP9ab_combined_r1_4.csv")
+df = pd.read_csv("EXP9ab_n200_combined_r1_4.csv")
 
 # ## Set parameters
 # - Accuracy threshold for the easiest trials of the main task 
@@ -51,7 +51,7 @@ which_exp = args.exp
 catch_threshold = args.catch_threshold
 RT_threshold = args.RT_threshold # did not use here
 print("catch threshold:", catch_threshold)
-print("How many subjects collected across all three exps:", len(df['participant_id'].unique()))
+print("How many subjects collected across all two exps:", len(df['participant_id'].unique()))
 
 ## Tasks & Conditions: Clean up task and subject ID (first five characters)
 df['task'] = df['trial_template'].apply(lambda x: x.split("_")[1] if (x.split("_")[0] == which_exp.split("-")[0]) else x.split("_")[0])
@@ -141,27 +141,26 @@ print('Participant_number:', n_subj,'Trial number:', n_trial,'Condition number:'
 # - Main task (n = 576): 6 context tones + 1 single tone (early, ontime, late; 1 to 8 steps) without feedback
 
 # ### Select the prescreen and discrimination trials for EXP9a
-if which_exp == "EXP9a":
-    df_prescreen = df_clean[(df_clean['task'] == "PrescreenTrials")].reset_index()
-    df_discriminate = df_clean[(df_clean['task'] == "DiscriminationTrials")].reset_index()
-    df_prescreen.groupby(['stimuli_presented'])['Shorter'].mean()
-    df_discriminate.groupby(['stimuli_presented'])['Shorter'].mean()
-    ## Code the shorter stimuli e.g. back, beat, lack as 1 andl onger stimuli as 8
-    length = []
-    for i in np.arange(0,len(df_prescreen)):
-        if df_prescreen['stimuli_presented'][i] in Shorter_stimuli:
-            length.append(1)
-        else:
-            length.append(8)
-    df_prescreen['Length'] = length
-    ## Code the lap/lab continuum from 1 to 8 (Lap to Lab)
-    length = []
-    for i in np.arange(0,len(df_discriminate)):
-        length.append(df_discriminate['stimuli_presented'][i][-1])
-    df_discriminate['Length'] = length
+df_prescreen = df_clean[(df_clean['task'] == "PrescreenTrials")].reset_index()
+df_discriminate = df_clean[(df_clean['task'] == "DiscriminationTrials")].reset_index()
+df_prescreen.groupby(['stimuli_presented'])['Shorter'].mean()
+df_discriminate.groupby(['stimuli_presented'])['Shorter'].mean()
+## Code the shorter stimuli e.g. back, beat, lack as 1 andl onger stimuli as 8
+length = []
+for i in np.arange(0,len(df_prescreen)):
+    if df_prescreen['stimuli_presented'][i] in Shorter_stimuli:
+        length.append(1)
+    else:
+        length.append(8)
+df_prescreen['Length'] = length
+## Code the lap/lab continuum from 1 to 8 (Lap to Lab)
+length = []
+for i in np.arange(0,len(df_discriminate)):
+    length.append(df_discriminate['stimuli_presented'][i][-1])
+df_discriminate['Length'] = length
 
-    df_prescreen.to_csv(path_to_data+which_exp+"_prescreen_clean_n" + str(n_subj) +".csv", header=True)
-    df_discriminate.to_csv(path_to_data+which_exp+"_discrimination_clean_n" + str(n_subj) +".csv", header=True)
+df_prescreen.to_csv(path_to_data+which_exp+"_prescreen_clean_n" + str(n_subj) +".csv", header=True)
+df_discriminate.to_csv(path_to_data+which_exp+"_discrimination_clean_n" + str(n_subj) +".csv", header=True)
 
 # ### Select the pretest trials 
 df_pre = df_clean[(df_clean['task'] == "PretestTrials")].reset_index()

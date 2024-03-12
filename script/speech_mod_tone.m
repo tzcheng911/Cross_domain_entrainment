@@ -31,13 +31,17 @@ addpath('/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/script')
 %     audiowrite(strcat('tone_',name(7:end)),r_mod_pure_tone,fs)
 % end
 
-%% Create single speech modified tone for each add-at step: rectified speech envelope
+%% Create single speech modified tone for each add-at step: average speech envelope
 cd('/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8b/stimuli/test_stimuli')
 allspeech = dir('a*');
 
 for i = 1:length(allspeech)
-    name = allspeech(i).name;
-    [speech,fs] = audioread(name);
+    % name = allspeech(i).name;
+    % [speech,fs] = audioread(name);
+    % for the six pairs
+    name = {'Back.wav','Bag.wav','Bead.wav','Beat.wav','Cab.wav','Cap.wav',...
+        'Fad.wav','Fat.wav','Lab.wav','Lap.wav','Lag.wav','Lack.wav'};
+    [speech,fs] = audioread(name{i});
 
     %% Generate the sine wave tones length-matching the steps
     f0 = 440;
@@ -49,13 +53,17 @@ for i = 1:length(allspeech)
     speech_r = abs(speech);
     
     % Traditional rectified speech
-    [env_up,env_lo] = envelope(speech_r,200,'peak'); % only the upper envelope
+    [env_up,env_lo] = envelope(speech_r,200,'peak'); 
     env_avg = 0.5*(env_up+(-1*env_lo));
     % env_up(env_up < 0) = 0; % force the envelope >=0
     mod_pure_tone = pure_tone(:).*env_avg(:);    
     
-    audiowrite(strcat('avg_env_tone_',name(2:end)),mod_pure_tone,fs)
-    audiowrite(strcat('speech_',name(2:end)),speech,fs)
+%     audiowrite(strcat('avg_env_tone_',name(2:end)),mod_pure_tone,fs)
+%     audiowrite(strcat('speech_',name(2:end)),speech,fs)
+    
+% for the six pairs    
+    audiowrite(strcat('avg_env_tone_',name{i}),mod_pure_tone,fs)
+    audiowrite(strcat('speech_',name{i}),speech,fs)
 end
 
 %% Visualize the env

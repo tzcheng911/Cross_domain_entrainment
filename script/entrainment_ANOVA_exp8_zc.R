@@ -70,7 +70,14 @@ pps = aovdata %>% group_by(sub_id,fOnsetR,Explabel) %>% summarise(ShorterM=mean(
 aovmeans = cbind(pps$ShorterM,aovmeans)
 colnames(aovmeans)[1] = 'Shorter'
 
-## flag outliers based on slope
+## EXP9 flag outliers based on slope
+# who have reverse slopes, flat lines
+# '8db1d','074c2' press the same button across all experiment 
+aovmeans$outliers_slope = ifelse(aovmeans$slope>= 0 | aovmeans$sub_id == '8db1d' | aovmeans$sub_id == '074c2',1,0)
+outliers_slope_subj = filter(aovmeans,outliers_slope==1)
+aovmeans_clean1 = filter(aovmeans, !(sub_id %in% unique(outliers_slope_subj$sub_id)))
+
+## EXP8 flag outliers based on slope
 # who have reverse slopes, flat lines
 # 'af90a' press the same button across all experiment 
 aovmeans$outliers_slope = ifelse(aovmeans$slope>= 0 | aovmeans$sub_id == 'af90a',1,0)
@@ -106,13 +113,21 @@ aovdata_outlier_50 = filter(aovdata, sub_id %in% unique(outliers_subj_50$sub_id)
 aovdata_clean$fOnsetR = factor(aovdata_clean$fOnsetR, levels = c("early","ontime","late"))
 aovdata_outlier_slope$fOnsetR = factor(aovdata_outlier_slope$fOnsetR, levels = c("early","ontime","late"))
 aovdata_outlier_50$fOnsetR = factor(aovdata_outlier_50$fOnsetR, levels = c("early","ontime","late"))
+
+## EXP8
 aovdata_clean$Explabel = factor(aovdata_clean$Explabel, levels = c("EXP8a","EXP8b","EXP8c"))
 aovdata_outlier_slope$Explabel = factor(aovdata_outlier_slope$Explabel, levels = c("EXP8a","EXP8b","EXP8c"))
 aovdata_outlier_50$Explabel = factor(aovdata_outlier_50$Explabel, levels = c("EXP8a","EXP8b","EXP8c"))
+aovdata_clean_plot$Explabel = factor(aovdata_clean_plot$Explabel, levels = c("EXP8a","EXP8b","EXP8c"))
+
+##EXP9
+aovdata_clean$Explabel = factor(aovdata_clean$Explabel, levels = c("EXP9a","EXP9b"))
+aovdata_outlier_slope$Explabel = factor(aovdata_outlier_slope$Explabel, levels = c("EXP9a","EXP9b"))
+aovdata_outlier_50$Explabel = factor(aovdata_outlier_50$Explabel, levels = c("EXP9a","EXP9b"))
+aovdata_clean_plot$Explabel = factor(aovdata_clean_plot$Explabel, levels = c("EXP9a","EXP9b"))
 
 aovdata_clean_plot = aovdata_clean %>% group_by(rLength,fOnsetR,Explabel) %>% summarise(mShorter=mean(Shorter),SD=sd(Shorter),Nsubs=n_distinct(sub_id))
 aovdata_clean_plot$fOnsetR = factor(aovdata_clean_plot$fOnsetR, levels = c("early","ontime","late"))
-aovdata_clean_plot$Explabel = factor(aovdata_clean_plot$Explabel, levels = c("EXP8a","EXP8b","EXP8c"))
 
 ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetR,linetype=Explabel,group=interaction(fOnsetR,Explabel)))+
   geom_point()+
@@ -126,20 +141,26 @@ ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetR,linetype=Explab
 # c = filter(aovdata_clean_plot,fOnsetR == "ontime" & Explabel == "EXP8c" & abs(rLength) > 1.52)
 
 # Very slow!!! individual plot for clean data
-ggplot(aovdata_clean,aes(x=Length,y=Shorter,color=fOnsetR,shape=Explabel))+
+ggplot(aovdata_clean,aes(x=rLength,y=Shorter,color=fOnsetR,shape=Explabel))+
   scale_color_manual(values=c("red","green","blue"))+
   geom_point()+
   # geom_line()+
   #  geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
-  #  geom_smooth(method="lm",se=FALSE) +
-  geom_smooth(method="glm",method.args = list(family = "binomial"),se=FALSE) +
+   geom_smooth(method="lm",se=FALSE) +
+  # geom_smooth(method="glm",method.args = list(family = "binomial"),se=FALSE) +
   facet_wrap(sub_id~.) +
   theme(strip.text.x = element_blank())
 
-## relabel
+## EXP8 relabel
 aovmeans_clean2$Explabel = ifelse(aovmeans_clean2$Explabel == "EXP8a","Speech",ifelse(aovmeans_clean2$Explabel == "EXP8b","Tones","ToneasSpeech"))
-aovmeans_clean2$fOnsetR = factor(aovmeans_clean2$fOnsetR, levels = c("early","ontime","late"))
 aovmeans_clean2$Explabel = factor(aovmeans_clean2$Explabel, levels = c("Speech","Tones","ToneasSpeech"))
+
+## EXP9 relabel
+aovmeans_clean2$Explabel = ifelse(aovmeans_clean2$Explabel == "EXP9a","Speech","Tones")
+aovmeans_clean2$Explabel = factor(aovmeans_clean2$Explabel, levels = c("Speech","Tones"))
+
+
+aovmeans_clean2$fOnsetR = factor(aovmeans_clean2$fOnsetR, levels = c("early","ontime","late"))
 
 ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetR)) +
   geom_boxplot(outlier.size = 0) + 
@@ -150,13 +171,19 @@ ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetR)) +
   geom_point(position = position_jitterdodge(jitter.width = 0.1)) +
   labs(x = "Onset")
 
-## Final sample size
+## EXP8 Final sample size
 exp8a = filter(aovmeans_clean2,Explabel == "Speech")
 exp8b = filter(aovmeans_clean2,Explabel == "Tones")
 exp8c = filter(aovmeans_clean2,Explabel == "ToneasSpeech")
 length(unique(exp8a$sub_id))
 length(unique(exp8b$sub_id))
 length(unique(exp8c$sub_id))
+
+## EXP9 Final sample size
+exp9a = filter(aovmeans_clean2,Explabel == "Speech")
+exp9b = filter(aovmeans_clean2,Explabel == "Tones")
+length(unique(exp9a$sub_id))
+length(unique(exp9b$sub_id))
 
 ## Descriptive stats of pretests
 # exclude outliers as identified from the main task 
@@ -206,9 +233,16 @@ cohen.d(filter(prescreen,Length == 1)$ShorterM,filter(prescreen,Length == 8)$Sho
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
 ## ANOVA on Length x Onset in Speech condition
+# EXP8
 aovdata_clean$rLength = factor(aovdata_clean$rLength)
 m = summary(aov(Shorter~fOnsetR*rLength+Error(sub_id/(fOnsetR*rLength)),data = filter(aovdata_clean,Explabel=="EXP8a")))
 m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[2]) # rLength
+
+# EXP9
+aovdata_clean$rLength = factor(aovdata_clean$rLength)
+m = summary(aov(Shorter~fOnsetR*rLength+Error(sub_id/(fOnsetR*rLength)),data = filter(aovdata_clean,Explabel=="EXP9a")))
+m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:rLength'[[1]]$`Sum Sq`[2]) # rLength
+
 
 ## ANOVA on proportion short
 m = summary(aov(Shorter~fOnsetR*Explabel+Error(sub_id/fOnsetR),data=aovmeans_clean2)) 

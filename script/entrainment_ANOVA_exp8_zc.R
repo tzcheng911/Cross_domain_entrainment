@@ -17,9 +17,14 @@ EXPtoneasspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_
 EXPtoneasspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/EXP8c-s_clean_n34.csv") 
 EXPspeech_pre = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8a_prescreen_clean_n80.csv")
 EXPspeech_disc = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8a_discrimination_clean_n80.csv")
+EXPspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9a_clean_n79.csv")
+EXPtone = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9b_clean_n76.csv") 
 
+## EXP8: 3 conditions
 alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXPspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),
               select(EXPtoneasspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct))
+## EXP9: 2 conditions
+alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXPspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct))
 
 ## Rescale and mutate new factors
 alldata = alldata %>%
@@ -40,21 +45,21 @@ alldata$OnsetHelm2=ifelse(alldata$fOnsetR=="early",0,ifelse(alldata$fOnsetR=="on
 
 ## sort the data to be subjects x onset for each experiment
 aovdata=alldata %>% #filter(comparison>=6) %>% ### if you limit speech to continua 1-5, no diffs. strong for 6-8
-  group_by(fOnsetR,Explabel,OnsetNum,Length,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
+  group_by(fOnsetR,Explabel,OnsetNum,rLength,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
 
 ## Very slow!!!!!!!
-# ggplot(aovdata,aes(x=rLength,y=Shorter,color=fOnsetR))+
-#   scale_color_manual(values=c("red","blue","gray"))+
-#   geom_point()+
-#   # geom_line()+
-#   #geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
-#   geom_smooth(method="lm",se=FALSE) +
-#   facet_wrap(sub_id~.)
+ggplot(aovdata,aes(x=rLength,y=Shorter,color=fOnsetR))+
+  scale_color_manual(values=c("red","blue","gray"))+
+  geom_point()+
+  # geom_line()+
+  #geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
+  geom_smooth(method="lm",se=FALSE) +
+  facet_wrap(sub_id~.)
 
 # run logistic fit on each subject and condition
 aovmeans=aovdata %>% 
   group_by(sub_id,fOnsetR,Explabel) %>% 
-  do(glmfit = glm(Shorter ~ Length,data =.,family=binomial())) 
+  do(glmfit = glm(Shorter ~ rLength,data =.,family=binomial())) 
 
 # get the coefficients 
 aovmeans = aovmeans %>%

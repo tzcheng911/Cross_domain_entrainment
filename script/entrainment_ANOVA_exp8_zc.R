@@ -17,8 +17,6 @@ EXPtoneasspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_
 EXPtoneasspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/EXP8c-s_clean_n34.csv") 
 EXPspeech_pre = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8a_prescreen_clean_n80.csv")
 EXPspeech_disc = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8a_discrimination_clean_n80.csv")
-EXPspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9a_clean_n79.csv")
-EXPtone = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9b_clean_n76.csv") 
 
 ## EXP8: 3 conditions
 alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXPspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),

@@ -10,7 +10,7 @@ library(lsr)
 library(stringr)
 
 ## Load the data
-EXP = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/p-center/results/pilot_pcenter_results.csv") 
+EXP = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/p-center/results/pilot_pcenter_results.csv") 
 
 ## Preprocessing
 # Filter the main task
@@ -24,7 +24,7 @@ mainEXP = mainEXP %>%
 mainEXP = mainEXP %>%
   mutate(delay = str_split(as.character(mainEXP$stimuli_presented),"_",simplify = T)[,2])
 mainEXP = mainEXP %>%
-  mutate(len = str_sub(strsplit(as.character(mainEXP$stimuli_presented),"_",simplify = T)[,1],-1))
+  mutate(len = str_sub(str_split(as.character(mainEXP$stimuli_presented),"_",simplify = T)[,1],-1))
 mainEXP$delay = factor(mainEXP$delay, levels = c("0","30","60","90","120"))
 
 ## Analysis

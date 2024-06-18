@@ -9,7 +9,8 @@ library(effsize)
 library(lsr)
 
 ## Load the data
-EXPtone = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4c/results/EXP4c_clean_n71.csv") 
+EXPNattone = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortdelay_2020/EXP4a_clean_n53.csv") 
+EXPAmtone = read.csv("/Users/t.z.cheng/Documents/GitHub//cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4c/results/EXP4c_clean_n71.csv") 
 EXPspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp6_21CR03_Vowel_length/FF2021/results/EXP6_clean_n79.csv")
 
 ## flag the overlapping subjects between EXP4 and EXP6
@@ -22,7 +23,6 @@ alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Corr
 alldata = alldata %>%
   filter(alldata$overlap == 0) %>%
   droplevels
-
 
 ## Rescale and mutate new factors
 alldata = alldata %>%

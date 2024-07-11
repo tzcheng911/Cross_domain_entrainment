@@ -403,8 +403,12 @@ cohen.d(filter(aovmeans_clean2,Explabel=="ToneasSpeech" & fOnsetR=="ontime")$fif
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
 ## glmer on proportion short
+## EXPlabel coding and reference only when running the glmer for only Speech and Tone condition (no Tone-as-Speech)
+alldata$Explabel = ifelse(alldata$exp=="EXP8a",-0.5,0.5)
+
 alldata_clean_allEXPlabel = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) 
 alldata_clean = filter(alldata_clean_allEXPlabel, Explabel!= "EXP8c") 
+
 
 # full
 lmall = glmer(Shorter ~ Explabel*fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  

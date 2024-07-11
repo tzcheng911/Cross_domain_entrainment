@@ -220,6 +220,6 @@ print(stats.ttest_rel(PPS_early, PPS_ontime))
 print(stats.ttest_rel(PPS_late, PPS_ontime))
 
 ## save df to csv
-df_clean.to_csv(path_to_data+which_exp+"_clean_n" + str(n_subj) +".csv", header=True)
-print('Cleaned data saved!')
+# df_clean.to_csv(path_to_data+which_exp+"_clean_n" + str(n_subj) +".csv", header=True)
+# print('Cleaned data saved!')
 

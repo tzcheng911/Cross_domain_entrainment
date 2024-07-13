@@ -120,15 +120,15 @@ ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetE,linetype=Explab
   theme_bw()
 
 # Very slow!!! individual plot for clean data
-# ggplot(aovdata_clean,aes(x=rLength,y=Shorter,color=fOnsetE,shape=Explabel))+
-#   scale_color_manual(values=c("red","green","blue"))+
-#   geom_point()+
-#   # geom_line()+
-#   #  geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
-#    geom_smooth(method="lm",se=FALSE) +
-#   # geom_smooth(method="glm",method.args = list(family = "binomial"),se=FALSE) +
-#   facet_wrap(sub_id~.) +
-#   theme(strip.text.x = element_blank())
+ggplot(aovdata_outlier_50,aes(x=Length,y=Shorter,color=fOnsetE,shape=Explabel))+
+  scale_color_manual(values=c("red","green","blue"))+
+  geom_point()+
+  # geom_line()+
+  # geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
+  # geom_smooth(method="lm",se=FALSE) +
+  geom_smooth(method="glm",method.args = list(family = "binomial"),se=FALSE) +
+  facet_wrap(sub_id~.) +
+  theme(strip.text.x = element_blank())
 
 ## EXP9 relabel
 aovmeans_clean2$Explabel = ifelse(aovmeans_clean2$Explabel == "EXP9a","Speech","Tones")

@@ -29,12 +29,13 @@ mainEXP$delay = factor(mainEXP$delay, levels = c("0","30","60","90","120"))
 
 ## Analysis
 mainEXPmeans=mainEXP %>% 
-  group_by(stimuli,delay,len) %>%
+  group_by(stimuli,delay) %>%
   summarize(mean = mean(response_value), SD = sd(response_value))
 
 ## Visualization
-ggplot(mainEXPmeans,aes(x=delay,y=mean,color=stimuli,linetype=len, group=interaction(stimuli,len)))+
+ggplot(mainEXPmeans,aes(x=delay,y=mean,color=stimuli, group=interaction(stimuli)))+
   geom_line()+
-  geom_point()
+  geom_point()+
+  theme_bw()
 #  geom_errorbar(aes(ymin=mean-SD/sqrt(12),ymax=mean+SD/sqrt(12)),width=0)
   

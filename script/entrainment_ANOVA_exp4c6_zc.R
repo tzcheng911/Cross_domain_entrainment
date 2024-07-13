@@ -10,7 +10,7 @@ library(lsr)
 
 ## Load the data
 EXPNattone = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortdelay_2020/EXP4a_clean_n53.csv") 
-EXPAmtone = read.csv("/Users/t.z.cheng/Documents/GitHub//cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4c/results/EXP4c_clean_n71.csv") 
+EXPtone = read.csv("/Users/t.z.cheng/Documents/GitHub/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4c/results/EXP4c_clean_n71.csv") 
 EXPspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp6_21CR03_Vowel_length/FF2021/results/EXP6_clean_n79.csv")
 
 ## flag the overlapping subjects between EXP4 and EXP6
@@ -43,7 +43,7 @@ alldata$OnsetHelm2=ifelse(alldata$fOnsetR=="early",0,ifelse(alldata$fOnsetR=="on
 
 ## sort the data to be subjects x onset for each experiment
 aovdata=alldata %>% #filter(comparison>=6) %>% ### if you limit speech to continua 1-5, no diffs. strong for 6-8
-  group_by(fOnsetR,Explabel,OnsetNum,rLength,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
+  group_by(fOnsetR,Explabel,OnsetNum,Length,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
 
 ## Very slow!!!!!!!
 # ggplot(aovdata,aes(x=rLength,y=Shorter,color=fOnsetR))+
@@ -57,7 +57,7 @@ aovdata=alldata %>% #filter(comparison>=6) %>% ### if you limit speech to contin
 # run logistic fit on each subject and condition
 aovmeans=aovdata %>% 
   group_by(sub_id,fOnsetR,Explabel) %>% 
-  do(glmfit = glm(Shorter ~ rLength,data =.,family=binomial())) 
+  do(glmfit = glm(Shorter ~ Length,data =.,family=binomial())) 
 
 # get the coefficients 
 aovmeans = aovmeans %>%
@@ -136,14 +136,30 @@ aovmeans_clean2$Explabel = ifelse(aovmeans_clean2$Explabel == "EXP6","Speech","T
 aovmeans_clean2$fOnsetR = factor(aovmeans_clean2$fOnsetR, levels = c("early","ontime","late"))
 aovmeans_clean2$Explabel = factor(aovmeans_clean2$Explabel, levels = c("Speech","Tones"))
 
-ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetR)) +
-  geom_boxplot(outlier.size = 0) + 
-  geom_point(position = position_jitterdodge(jitter.width = 0.1)) +
-  labs(x = "Onset")
+## box plot
 ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetR)) +
   geom_boxplot(outlier.size = 0) + 
   geom_point(position = position_jitterdodge(jitter.width = 0.1)) +
   labs(x = "Onset")
+ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetR)) +
+  geom_boxplot(outlier.size = 0) + 
+  geom_point(position = position_jitterdodge(jitter.width = 0.1)) +
+  labs(x = "Onset")
+
+## bar plot
+ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetR)) +
+  geom_bar(stat="summary", fun.y = "mean", position='dodge') +
+  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
+  ylim(0,0.8) + 
+  geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
+  theme_bw()
+
+ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetR)) +
+  geom_bar(stat="summary", fun.y = "mean", position='dodge') +
+  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
+  ylim(0,8) + 
+  geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
+  theme_bw()
 
 ## Final sample size
 exp8a = filter(aovmeans_clean2,Explabel == "Speech")

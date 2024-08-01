@@ -10,13 +10,13 @@ library(lsr)
 
 ## sc updated 03/20/2023
 ## Load the data
-EXPtone = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8b_clean_n84.csv") 
-EXPspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8a_clean_n80.csv")
-EXPtoneasspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8c_clean_n88.csv") 
-EXPtoneasspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8c-s_clean_n20.csv") 
-EXPtoneasspeech = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/EXP8c-s_clean_n34.csv") 
-EXPspeech_pre = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8a_prescreen_clean_n80.csv")
-EXPspeech_disc = read.csv("/Users/t.z.cheng/Google_Drive/Research/cross_domain_entrainment/exp8/results/old/EXP8a_discrimination_clean_n80.csv")
+EXPtone = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8b_clean_n84.csv") 
+EXPspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8a_clean_n80.csv")
+EXPtoneasspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8c_clean_n88.csv") 
+EXPtoneasspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8c-s_clean_n20.csv") 
+EXPtoneasspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/EXP8c-s_clean_n34.csv") 
+EXPspeech_pre = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8a_prescreen_clean_n80.csv")
+EXPspeech_disc = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8a_discrimination_clean_n80.csv")
 
 ## EXP8: 3 conditions
 alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXPspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),
@@ -441,3 +441,19 @@ summary(lmall_toneasspeech) # Use early as the reference
 anova(lmall_speech,lmall_speech_noOnset)
 anova(lmall_tone,lmall_tone_noOnset)
 anova(lmall_toneasspeech,lmall_toneasspeech_noOnset)
+
+## Tests to compare the variance between Speech and Tone conditions
+aovmeans_clean2_vartest = select(aovmeans_clean2,sub_id,Explabel,fOnsetR,Shorter) # aovmeans_clean2 is the data average across Length
+aovmeans_clean2_vartest = aovmeans_clean2_vartest %>%
+  pivot_wider(names_from = fOnsetR, values_from = Shorter) %>% 
+  mutate(diff = early-late)
+
+aovmeans_clean2_vartest$Explabel = factor(aovmeans_clean2_vartest$Explabel, levels = c("EXP8a","EXP8b"))
+
+ggplot(aovmeans_clean2_vartest, aes(x = Explabel, y = diff)) +
+  geom_boxplot(outlier.size = 0) + 
+  geom_point(position = position_jitter()) +
+  theme_bw()
+
+bartlett.test(diff ~ Explabel, data = aovmeans_clean2_vartest)
+levene_test(diff ~ Explabel, data = aovmeans_clean2_vartest)

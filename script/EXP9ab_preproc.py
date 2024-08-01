@@ -153,6 +153,7 @@ for i in np.arange(0,len(df_prescreen)):
     else:
         length.append(8)
 df_prescreen['Length'] = length
+
 ## Code the lap/lab continuum from 1 to 8 (Lap to Lab)
 length = []
 for i in np.arange(0,len(df_discriminate)):
@@ -168,6 +169,14 @@ df_pre.groupby(['sub_id','stimuli_presented'])['Correct'].mean()
 pre_acc = df_pre.groupby(['sub_id'])['Correct'].mean()
 conds = df_pre['stimuli_presented'].unique()
 print(df_pre.groupby('stimuli_presented')['Shorter'].mean())
+length = []
+for i in np.arange(0,len(df_pre)):
+    length.append(df_pre['stimuli_presented'][i][-1])
+df_pre['Length'] = length
+
+if which_exp == 'EXP9b':
+    df_pre.to_csv(path_to_data+which_exp+"_discrimination_clean_n" + str(n_subj) +".csv", header=True)
+
 
 
 # ### Select the main trials

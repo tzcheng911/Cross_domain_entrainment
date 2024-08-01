@@ -7,11 +7,12 @@ library(ggpubr)
 library('fastDummies')
 library(effsize)
 library(lsr)
-library(lsr)
+library(rstatix)
+library(car)
 
 ## Load the data
-EXPspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9a_clean_n79.csv")
-EXPtone = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9b_clean_n76.csv") 
+EXPspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9a_clean_n79.csv") # EXP9a_discrimination_clean_n79.csv
+EXPtone = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9b_clean_n76.csv") # EXP9b_discrimination_clean_n76.csv
 
 ## EXP9: 2 conditions
 alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXPspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct))
@@ -222,7 +223,7 @@ m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[1]/(sum(m$'Error: sub_id:fOnsetE'[[1]]$`
 # Speech
 p = t.test(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="ontime")$Shorter,paired=T)
 p
-cohen.d(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="ontime")$Shorter,paired=T)
+cohen.d(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="ontime")$Shorter,paired=T) # this is cohen'd rm
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
 p = t.test(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="late")$Shorter,paired=T)
@@ -328,3 +329,20 @@ summary(lmall_speech) # Use early as the reference
 summary(lmall_tone) # Use early as the reference
 anova(lmall_speech,lmall_speech_noOnset)
 anova(lmall_tone,lmall_tone_noOnset)
+
+## Tests to compare the variance between Speech and Tone conditions
+aovmeans_clean2_vartest = select(aovmeans_clean2,sub_id,Explabel,fOnsetE,Shorter) # aovmeans_clean2 is the data average across Length
+aovmeans_clean2_vartest = aovmeans_clean2_vartest %>%
+  pivot_wider(names_from = fOnsetE, values_from = Shorter) %>% 
+  mutate(diff = early-late)
+
+aovmeans_clean2_vartest$Explabel = factor(aovmeans_clean2_vartest$Explabel, levels = c("EXP9a","EXP9b"))
+  
+ggplot(aovmeans_clean2_vartest, aes(x = Explabel, y = diff)) +
+  geom_boxplot(outlier.size = 0) + 
+  geom_point(position = position_jitter()) +
+  theme_bw()
+
+bartlett.test(diff ~ Explabel, data = aovmeans_clean2_vartest)
+levene_test(diff ~ Explabel, data = aovmeans_clean2_vartest)
+leveneTest(diff ~ Explabel, data = aovmeans_clean2_vartest)

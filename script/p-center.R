@@ -28,14 +28,22 @@ mainEXP = mainEXP %>%
 mainEXP$delay = factor(mainEXP$delay, levels = c("0","30","60","90","120"))
 
 ## Analysis
-mainEXPmeans=mainEXP %>% 
+mainEXPmeans_subj=mainEXP %>% 
+  group_by(stimuli,delay, participant_id) %>%
+  summarize(meanResp = mean(response_value))
+
+mainEXPmeans = mainEXPmeans_subj %>%
   group_by(stimuli,delay) %>%
-  summarize(mean = mean(response_value), SD = sd(response_value))
+  summarize(mean = mean(meanResp), SD = sd(meanResp))
+
+length(unique(mainEXP$participant_id))
 
 ## Visualization
 ggplot(mainEXPmeans,aes(x=delay,y=mean,color=stimuli, group=interaction(stimuli)))+
-  geom_line()+
-  geom_point()+
-  theme_bw()
-#  geom_errorbar(aes(ymin=mean-SD/sqrt(12),ymax=mean+SD/sqrt(12)),width=0)
-  
+  geom_line(position=position_dodge(width=0.1))+
+  geom_point(position=position_dodge(width=0.1))+
+  theme_bw() +
+  ylim(0,1) + 
+  scale_colour_grey()+
+  geom_errorbar(aes(ymin=mean-SD/sqrt(12),ymax=mean+SD/sqrt(12)),width=0,position=position_dodge(width=0.1))
+                

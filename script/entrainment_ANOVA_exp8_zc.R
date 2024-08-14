@@ -403,10 +403,9 @@ cohen.d(filter(aovmeans_clean2,Explabel=="ToneasSpeech" & fOnsetR=="ontime")$fif
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
 ## glmer on proportion short
-## EXPlabel coding and reference only when running the glmer for only Speech and Tone condition (no Tone-as-Speech)
 alldata_clean_allEXPlabel = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) 
-alldata_cleanGLM = filter(alldata_clean_allEXPlabel, Explabel!= "EXP8c") # could be EXP8a, EXP8b or EXP8c
-alldata_cleanGLM$Explabel = ifelse(alldata_cleanGLM$exp=="EXP8a",-0.5,0.5) # sum coding for the two conditions being compared, could be EXP8a, EXP8b or EXP8c
+alldata_cleanGLM = filter(alldata_clean_allEXPlabel, Explabel!= "EXP8a") # could be EXP8a, EXP8b or EXP8c
+alldata_cleanGLM$Explabel = ifelse(alldata_cleanGLM$exp=="EXP8b",-0.5,0.5) # sum coding for the two conditions being compared, could be EXP8a, EXP8b or EXP8c
 
 # full
 lmall = glmer(Shorter ~ Explabel*fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_cleanGLM,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
@@ -428,12 +427,12 @@ summary(lmall_no3way) # Use early as the reference
 anova(lmall,lmall_no3way)
 
 # submodels
-lmall_speech = glmer(Shorter ~ fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM_allEXPlabel,exp=="EXP8a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-lmall_speech_noOnset = glmer(Shorter ~ fOnsetE*rLength - fOnsetE  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM_allEXPlabel,exp=="EXP8a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-lmall_tone = glmer(Shorter ~ fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM_allEXPlabel,exp=="EXP8b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-lmall_tone_noOnset = glmer(Shorter ~ fOnsetE*rLength - fOnsetE + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM_allEXPlabel,exp=="EXP8b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-lmall_toneasspeech = glmer(Shorter ~ fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM_allEXPlabel,exp=="EXP8c"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-lmall_toneasspeech_noOnset = glmer(Shorter ~ fOnsetE*rLength - fOnsetE  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM_allEXPlabel,exp=="EXP8c"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+lmall_speech = glmer(Shorter ~ fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM,exp=="EXP8a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+lmall_speech_noOnset = glmer(Shorter ~ fOnsetE*rLength - fOnsetE  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM,exp=="EXP8a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+lmall_tone = glmer(Shorter ~ fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM,exp=="EXP8b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+lmall_tone_noOnset = glmer(Shorter ~ fOnsetE*rLength - fOnsetE + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM,exp=="EXP8b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+lmall_toneasspeech = glmer(Shorter ~ fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM,exp=="EXP8c"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+lmall_toneasspeech_noOnset = glmer(Shorter ~ fOnsetE*rLength - fOnsetE  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_cleanGLM,exp=="EXP8c"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 
 summary(lmall_speech) # Use early as the reference
 summary(lmall_tone) # Use early as the reference

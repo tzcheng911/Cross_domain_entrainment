@@ -156,31 +156,16 @@ end
 begin_time = {'early','ontime','late'}; % correspond to early(1), ontime(2), late(3) beginning
 delay_dur = {'2'}; 
 
-speech_path = '/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/stimuli/official_stimuli/speech_target_70db/';
-tone_path = '/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/stimuli/official_stimuli/avg_env_tone_target_85db/';
-out_path = ('/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp10/stimuli/');
+cd('/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp10/stimuli')
+allm = dir('/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp10/stimuli/speech*');
+allmtones = dir('/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp10/stimuli/speech*'); % or avg
 
-allspeechs = dir(strcat(speech_path,'speech*'));
-allmtones = dir(strcat(tone_path,'avg_env*'));
-
-% create tone sequences
 for i = 1:length(allmtones)
     name = allmtones(i).name;
-    [mtone,fs] = audioread(strcat(tone_path,name));
+    [mtone,fs] = audioread(name);
     for j = 1:length(begin_time)
         filename = strcat('300msA_',begin_time{j},'_delay_',delay_dur,'_',name);
         sound_file = [context zeros(1,round(fs*delay(j))) mtone'];
-        audiowrite(strcat(out_path,filename{1}),sound_file,fs);
-    end
-end
-
-% create speech sequences
-for i = 1:length(allspeechs)
-    name = allspeechs(i).name;
-    [speech,fs] = audioread(strcat(speech_path,name));
-    for j = 1:length(begin_time)
-        filename = strcat('300msA_',begin_time{j},'_delay_',delay_dur,'_',name);
-        sound_file = [context zeros(1,round(fs*delay(j))) speech'];
-        audiowrite(strcat(out_path,filename{1}),sound_file,fs);
+        audiowrite(filename{1},sound_file,fs);
     end
 end

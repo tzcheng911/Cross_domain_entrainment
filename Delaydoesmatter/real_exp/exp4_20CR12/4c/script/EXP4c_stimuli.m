@@ -102,6 +102,7 @@ for i = 1:length(allspeech)
 end
 
 %% Create context tone + target
+addpath('/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/script')
 % parameters to customize a tone (300 ms or 600 ms)
 fs = 44100; % sampling rate
 f0 = 440;
@@ -146,7 +147,7 @@ win_choice = 'linear';
 
 % Generate the context tones (empty), standard tones (filled), comparison
 % tones(filled)
-[a,fs] = audioread('/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp10/stimuli/addpip60ms.wav');
+[a,fs] = audioread('/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp10/context_addpip60ms_70dB.wav');
 if isequal(length(a)/fs,dur)
     context_a = [a' zeros(1,round(fs*(sIOI-dur)))];
     context = repmat(context_a,1,6);
@@ -154,6 +155,7 @@ else
     print('Check the length of the speech entrainer')
 end
 begin_time = {'early','ontime','late'}; % correspond to early(1), ontime(2), late(3) beginning
+
 delay_dur = {'2'}; 
 
 speech_path = '/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/stimuli/official_stimuli/speech_target_70db/';
@@ -168,9 +170,10 @@ for i = 1:length(allmtones)
     name = allmtones(i).name;
     [mtone,fs] = audioread(strcat(tone_path,name));
     for j = 1:length(begin_time)
-        filename = strcat('300msA_',begin_time{j},'_delay_',delay_dur,'_',name);
+%         filename = strcat('300msA_',begin_time{j},'_delay_',delay_dur,'_',name);
+        filename = strcat('speech70dB_',begin_time{j},'_',name);
         sound_file = [context zeros(1,round(fs*delay(j))) mtone'];
-        audiowrite(strcat(out_path,filename{1}),sound_file,fs);
+        audiowrite(strcat(out_path,filename),sound_file,fs);
     end
 end
 
@@ -179,8 +182,9 @@ for i = 1:length(allspeechs)
     name = allspeechs(i).name;
     [speech,fs] = audioread(strcat(speech_path,name));
     for j = 1:length(begin_time)
-        filename = strcat('300msA_',begin_time{j},'_delay_',delay_dur,'_',name);
+%         filename = strcat('300msA_',begin_time{j},'_delay_',delay_dur,'_',name);
+        filename = strcat('speech70dB_',begin_time{j},'_',name);
         sound_file = [context zeros(1,round(fs*delay(j))) speech'];
-        audiowrite(strcat(out_path,filename{1}),sound_file,fs);
+        audiowrite(strcat(out_path,filename),sound_file,fs);
     end
 end

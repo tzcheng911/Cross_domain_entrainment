@@ -1,0 +1,4 @@
+type,choices,key_mapping,target,instruction,feedback,name
+choice,"[""In time"",""Out of time""]","[""F"",""J""]","[""Out of time""]",The ticking clock sound is out of time relative to the speech sound. Please press the [Out of time] button.,true,exampleRsp_lab
+choice,"[""In time"",""Out of time""]","[""F"",""J""]","[""Out of time""]",The ticking clock sound is out of time relative to the tone. Please press the [Out of time] button.,true,exampleRsp_tone
+choice,"[""In time"",""Out of time""]","[""F"",""J""]",,Is the ticking clock sound in time or out of time?,false,testRsp

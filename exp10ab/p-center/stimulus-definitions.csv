@@ -1,0 +1,34 @@
+type,content,alignment,size,name,visible,delay
+text,Congratulations! You've completed the experiment. Thank you very much.,center,36px,Instruction_end,,
+text,"<p>Welcome! <br /> <br /> <br />On each trial, you will hear a repeated word or tone with a ticking clock sound. Your job is to say whether the ticking clock is in time or out of time relative to the tone/word. <br /> Please use earphones, earbuds or headphones while completing the task. Please adjust your volume to a comfortable sound level. <br /> Now let's hear some clear examples of 'not in time' so you know what to listen for.</p>",center,,LandingWelcome,,
+text,"<p>Good job! Ok, let's move on to the real experiment now. <br /> <br /> You won't see or hear the feedback in the following session. </p>",center,,MainI,,
+audio,addentrainer_pip0chainof10_mono.wav,,,addentrainer_0,FALSE,0.3
+audio,addentrainer_pip120chainof10_mono.wav,,,addentrainer_120,FALSE,0.3
+audio,addentrainer_pip30chainof10_mono.wav,,,addentrainer_30,FALSE,0.3
+audio,addentrainer_pip60chainof10_mono.wav,,,addentrainer_60,FALSE,0.3
+audio,addentrainer_pip90chainof10_mono.wav,,,addentrainer_90,FALSE,0.3
+audio,toneentrainer_pip0chainof10_mono.wav,,,toneentrainer_0,FALSE,0.3
+audio,toneentrainer_pip120chainof10_mono.wav,,,toneentrainer_120,FALSE,0.3
+audio,toneentrainer_pip30chainof10_mono.wav,,,toneentrainer_30,FALSE,0.3
+audio,toneentrainer_pip60chainof10_mono.wav,,,toneentrainer_60,FALSE,0.3
+audio,toneentrainer_pip90chainof10_mono.wav,,,toneentrainer_90,FALSE,0.3
+audio,avg_env_tone_1pip0chainof10_mono.wav,,,tone1_0,FALSE,0.3
+audio,avg_env_tone_1pip120chainof10_mono.wav,,,tone1_120,FALSE,0.3
+audio,avg_env_tone_1pip30chainof10_mono.wav,,,tone1_30,FALSE,0.3
+audio,avg_env_tone_1pip60chainof10_mono.wav,,,tone1_60,FALSE,0.3
+audio,avg_env_tone_1pip90chainof10_mono.wav,,,tone1_90,FALSE,0.3
+audio,avg_env_tone_8pip0chainof10_mono.wav,,,tone8_0,FALSE,0.3
+audio,avg_env_tone_8pip120chainof10_mono.wav,,,tone8_120,FALSE,0.3
+audio,avg_env_tone_8pip30chainof10_mono.wav,,,tone8_30,FALSE,0.3
+audio,avg_env_tone_8pip60chainof10_mono.wav,,,tone8_60,FALSE,0.3
+audio,avg_env_tone_8pip90chainof10_mono.wav,,,tone8_90,FALSE,0.3
+audio,speech_1pip0chainof10_mono.wav,,,add1_0,FALSE,0.3
+audio,speech_1pip120chainof10_mono.wav,,,add1_120,FALSE,0.3
+audio,speech_1pip30chainof10_mono.wav,,,add1_30,FALSE,0.3
+audio,speech_1pip60chainof10_mono.wav,,,add1_60,FALSE,0.3
+audio,speech_1pip90chainof10_mono.wav,,,add1_90,FALSE,0.3
+audio,speech_8pip0chainof10_mono.wav,,,add8_0,FALSE,0.3
+audio,speech_8pip120chainof10_mono.wav,,,add8_120,FALSE,0.3
+audio,speech_8pip30chainof10_mono.wav,,,add8_30,FALSE,0.3
+audio,speech_8pip60chainof10_mono.wav,,,add8_60,FALSE,0.3
+audio,speech_8pip90chainof10_mono.wav,,,add8_90,FALSE,0.3

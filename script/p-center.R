@@ -10,7 +10,7 @@ library(lsr)
 library(stringr)
 
 ## Load the data
-EXP = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/p-center/results/pilot_pcenter_results.csv") 
+EXP = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp10ab/p-center/results/session-67ef60de6de0902719c5faef-data.csv") 
 
 ## Preprocessing
 # Filter the main task

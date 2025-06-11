@@ -35,7 +35,8 @@ print('RT_threshold: ', args.RT_threshold)
 ## Load data
 path_to_data = args.path
 os.chdir(path_to_data)
-df = pd.read_csv("EXP9ab_n200_combined_r1_4.csv")
+# df = pd.read_csv("EXP9ab_n200_combined_r1_4.csv")
+df = pd.read_csv("EXP10ab_n168_combined_r1_2.csv")
 
 # ## Set parameters
 # - Accuracy threshold for the easiest trials of the main task 

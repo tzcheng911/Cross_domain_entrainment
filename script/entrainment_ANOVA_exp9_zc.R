@@ -11,15 +11,17 @@ library(rstatix)
 library(car)
 
 ## Load the data
-EXPspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9a_clean_n79.csv") # EXP9a_discrimination_clean_n79.csv
-EXPtone = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9b_clean_n76.csv") # EXP9b_discrimination_clean_n76.csv
+# EXPspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9a_clean_n79.csv") # EXP9a_discrimination_clean_n79.csv
+# EXPtone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9b_clean_n76.csv") # EXP9b_discrimination_clean_n76.csv
+EXPspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp10ab/results/EXP9a_clean_n67.csv") # EXP9a_discrimination_clean_n79.csv
+EXPtone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp10ab/results/EXP9b_clean_n67.csv") # EXP9b_discrimination_clean_n76.csv
 
 ## EXP9: 2 conditions
 alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXPspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct))
 
 ## Rescale and mutate new factors
 alldata = alldata %>%
-  mutate(rLength = scale(Length, center = TRUE, scale = TRUE)) # scale the steps ## 4c: scale Length; 6: scale comparison
+  mutate(rLength = scale(Length, center = TRUE, scale = TRUE)[,1]) # scale the steps ## 4c: scale Length; 6: scale comparison
 alldata = alldata %>%
   mutate(fOnset = as.factor(Onset))
 alldata = alldata %>%

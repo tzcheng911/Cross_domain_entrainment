@@ -9,12 +9,16 @@ library(effsize)
 library(lsr)
 library(rstatix)
 library(car)
+library(brms)
+library(emmeans)
+library(bayestestR)
 
+######################################## Preprocessing ########################################
 ## Load the data
 # EXPspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9a_clean_n79.csv") # EXP9a_discrimination_clean_n79.csv
 # EXPtone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9b_clean_n76.csv") # EXP9b_discrimination_clean_n76.csv
-EXPspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp10ab/results/EXP9a_clean_n67.csv") # EXP9a_discrimination_clean_n79.csv
-EXPtone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp10ab/results/EXP9b_clean_n67.csv") # EXP9b_discrimination_clean_n76.csv
+EXPspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp10ab/results/EXP10a_clean_n67.csv") # EXP9a_discrimination_clean_n79.csv
+EXPtone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp10ab/results/EXP10b_clean_n67.csv") # EXP9b_discrimination_clean_n76.csv
 
 ## EXP9: 2 conditions
 alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXPspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct))
@@ -42,7 +46,7 @@ alldata$OnsetHelm2=ifelse(alldata$fOnsetR=="early",0,ifelse(alldata$fOnsetR=="on
 
 ## sort the data to be subjects x onset for each experiment
 aovdata=alldata %>% #filter(comparison>=6) %>% ### if you limit speech to continua 1-5, no diffs. strong for 6-8
-  group_by(fOnsetE,Explabel,fOnset,Length,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
+  group_by(fOnsetE,Explabel,fOnset,rLength,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
 
 ## Very slow!!!!!!!
 # ggplot(aovdata,aes(x=rLength,y=Shorter,color=fOnsetR))+
@@ -56,7 +60,7 @@ aovdata=alldata %>% #filter(comparison>=6) %>% ### if you limit speech to contin
 # run logistic fit on each subject and condition
 aovmeans=aovdata %>% 
   group_by(sub_id,fOnsetE,Explabel) %>% 
-  do(glmfit = glm(Shorter ~ Length,data =.,family=binomial())) # change rLength to Length for visualization
+  do(glmfit = glm(Shorter ~ rLength,data =.,family=binomial())) # change rLength to Length for visualization
 
 # get the coefficients 
 aovmeans = aovmeans %>%
@@ -96,15 +100,13 @@ summary_aovmeans_clean2 = aovmeans_clean2 %>%
   group_by(Explabel,fOnsetE) %>%
   summarize(mfifty = mean(fifty), mShorter = mean(Shorter), Nsubs=n_distinct(sub_id), sefifty = sd(fifty)/sqrt(Nsubs), seShorter = sd(Shorter)/sqrt(Nsubs),sdShorter = sd(Shorter))
 
-# plot overall results
+# get the clean results and outliers
 aovdata_clean = filter(aovdata, sub_id %in% unique(aovmeans_clean2$sub_id)) 
 aovdata_outlier_slope = filter(aovdata, sub_id %in% unique(outliers_slope_subj$sub_id)) 
 aovdata_outlier_50 = filter(aovdata, sub_id %in% unique(outliers_subj_50$sub_id)) 
 aovdata_clean$fOnsetE = factor(aovdata_clean$fOnsetE, levels = c("early","ontime","late"))
 aovdata_outlier_slope$fOnsetE = factor(aovdata_outlier_slope$fOnsetE, levels = c("early","ontime","late"))
 aovdata_outlier_50$fOnsetE = factor(aovdata_outlier_50$fOnsetE, levels = c("early","ontime","late"))
-
-##EXP9
 aovdata_clean_plot = aovdata_clean %>% group_by(rLength,fOnsetE,Explabel) %>% summarise(mShorter=mean(Shorter),SD=sd(Shorter),Nsubs=n_distinct(sub_id))
 aovdata_clean_plot$fOnsetE = factor(aovdata_clean_plot$fOnsetE, levels = c("early","ontime","late"))
 aovdata_clean$Explabel = factor(aovdata_clean$Explabel, levels = c("EXP9a","EXP9b"))
@@ -114,6 +116,7 @@ aovdata_clean_plot$Explabel = factor(aovdata_clean_plot$Explabel, levels = c("EX
 
 testSD = aovdata_clean_plot %>% group_by(fOnsetE,Explabel) %>% summarise(mSD=mean(SD))
 
+# plot the results
 ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetE,linetype=Explabel,group=interaction(fOnsetE,Explabel)))+
   geom_point()+
   scale_x_continuous(breaks = seq(1, 8, by = 1))+
@@ -123,7 +126,7 @@ ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetE,linetype=Explab
   theme_bw()
 
 # Very slow!!! individual plot for clean data
-ggplot(aovdata_outlier_50,aes(x=Length,y=Shorter,color=fOnsetE,shape=Explabel))+
+ggplot(aovdata_outlier_50,aes(x=rLength,y=Shorter,color=fOnsetE,shape=Explabel))+
   scale_color_manual(values=c("red","green","blue"))+
   geom_point()+
   # geom_line()+
@@ -153,19 +156,19 @@ ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
   theme_bw()
 
 ## bar plot
-ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
-  geom_bar(stat="summary", fun.y = "mean", position='dodge') +
-  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
-  ylim(0,0.8) + 
-  geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
-  theme_bw()
-
-ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
-  geom_bar(stat="summary", fun.y = "mean", position='dodge') +
-  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
-  ylim(0,8) + 
-  geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
-  theme_bw()
+# ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
+#   geom_bar(stat="summary", fun.y = "mean", position='dodge') +
+#   stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
+#   ylim(0,0.8) + 
+#   geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
+#   theme_bw()
+# 
+# ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
+#   geom_bar(stat="summary", fun.y = "mean", position='dodge') +
+#   stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
+#   ylim(0,8) + 
+#   geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
+#   theme_bw()
 
 ## EXP9 Final sample size
 exp9a = filter(aovmeans_clean2,Explabel == "Speech")
@@ -210,7 +213,8 @@ length(unique(exp9b$sub_id))
 # ggplot(discrimination, aes(x = rLength, y = ShorterM, fill=rLength)) +
 #   geom_violin()
 
-## ANOVA on proportion short
+######################################## Statistic analysis ########################################
+#### overall ANOVA on proportion short
 m = summary(aov(Shorter~fOnsetE*Explabel+Error(sub_id/fOnsetE),data=aovmeans_clean2)) 
 # calculate partial generalized eta sq https://www.aggieerin.com/shiny-server/tests/gesmixss.html and based on Olejnik & Algina (2003)
 m$'Error: sub_id'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]) # Target
@@ -222,7 +226,7 @@ m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[1]/(sum(m$'Error: sub_id:fOnsetE'[[1]]$`
 m = summary(aov(Shorter~fOnsetE+Error(sub_id/fOnsetE),data=filter(aovmeans_clean2,Explabel=="Tones"))) 
 m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[1]/(sum(m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`)+m$'Error: sub_id'[[1]]$`Sum Sq`[1]) # calculate partial generalized eta sq
 
-# Speech
+#### pairwise ttests on Speech condition
 p = t.test(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="ontime")$Shorter,paired=T)
 p
 cohen.d(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="ontime")$Shorter,paired=T) # this is cohen'd rm
@@ -238,15 +242,10 @@ p
 cohen.d(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="ontime")$Shorter,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="late")$Shorter,paired=T)
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
-# Tone
+#### pairwise ttests on Tone condition
 p = t.test(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$Shorter,paired=T)
 p
 cohen.d(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$Shorter,paired=T)
-p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
-
-p = t.test(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
-p
-cohen.d(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
 p = t.test(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
@@ -254,7 +253,12 @@ p
 cohen.d(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
-## ANOVA on 50% point
+p = t.test(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
+p
+cohen.d(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
+p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
+
+#### overall ANOVA on 50% point
 m = summary(aov(fifty~fOnsetE*Explabel+Error(sub_id/fOnsetE),data=aovmeans_clean2)) 
 # calculate partial generalized eta sq https://www.aggieerin.com/shiny-server/tests/gesmixss.html and based on Olejnik & Algina (2003)
 m$'Error: sub_id'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]) # Target
@@ -266,7 +270,7 @@ m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[1]/(sum(m$'Error: sub_id:fOnsetE'[[1]]$`
 m = summary(aov(fifty~fOnsetE+Error(sub_id/fOnsetE),data=filter(aovmeans_clean2,Explabel=="Tones"))) 
 m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[1]/(sum(m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`)+m$'Error: sub_id'[[1]]$`Sum Sq`[1]) # calculate partial generalized eta sq
 
-# Speech
+#### pairwise ttests on Speech condition
 p = t.test(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="early")$fifty,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="ontime")$fifty,paired=T)
 p
 cohen.d(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="early")$fifty,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="ontime")$fifty,paired=T)
@@ -282,7 +286,7 @@ p
 cohen.d(filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="ontime")$fifty,filter(aovmeans_clean2,Explabel=="Speech" & fOnsetE=="late")$fifty,paired=T)
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
-# Tone
+#### pairwise ttests on Tone condition
 p = t.test(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$fifty,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$fifty,paired=T)
 p
 cohen.d(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$fifty,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$fifty,paired=T)
@@ -300,12 +304,13 @@ p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
 m = summary(aov(fifty~fOnsetE*Explabel+Error(sub_id/fOnsetE),data=aovmeans_clean2)) 
 
-## glmer on proportion short
+#### logistic regression on proportion short
 alldata_clean = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) 
 
 # full
 lmall = glmer(Shorter ~ Explabel*fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lmall) # Use early as the reference
+emmeans(lmall, pairwise ~ fOnsetE | Explabel)
 
 # reduce Target Duration (rLength)
 lmall_norLength = glmer(Shorter ~ Explabel*fOnsetE*rLength-rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
@@ -332,7 +337,36 @@ summary(lmall_tone) # Use early as the reference
 anova(lmall_speech,lmall_speech_noOnset)
 anova(lmall_tone,lmall_tone_noOnset)
 
-## Tests to compare the variance between Speech and Tone conditions
+#### Bayesian implementation of the logistic regression on proportion short
+## comments from Reviewer 1
+# did this with alldata_clean for Exp 2, except, I didn't replace experiment names with 0.5,-0.5, earlier in the script -- instead I added them as contrasts for the factor below
+# nothing fancy with priors, but a weakly non-zero prior for the effect of the continuum since we expect that to modulate responses a priori
+priors <-c(prior(normal(0, 1.5), class = Intercept),
+           prior(normal(-2, 1.5), class = b, coef=Length.scaled),
+           prior(normal(0, 1.5), class = b))
+
+## scaled the Length variable and contrasts myself here, nb scaling and centering are default parameter settings for scale()
+alldata_clean$Length.scaled<-scale(alldata_clean$Length)
+alldata_clean$Explabel<-as.factor(alldata_clean$Explabel)
+alldata_clean$fOnsetE<-as.factor(alldata_clean$fOnsetE)
+contrasts(alldata_clean$Explabel)<-c(-0.5,0.5)
+levels(as.factor(alldata_clean$fOnsetE))
+## model
+brms_model2<-brm(formula=Shorter~Explabel*fOnsetE*Length.scaled+
+                   (1+fOnsetE*Length.scaled|sub_id),
+                 prior = priors,
+                 data = alldata_clean,
+                 file = "brms2",
+                 family = bernoulli(link = "logit"),
+                 iter = 6000,warmup=1000,chains = 4,cores=8,control = list(adapt_delta=0.80))
+summary(brms_model2)
+pd(brms_model2)
+## credible interaction observed for the early reference level vs. late onset specifically
+conditional_effects(brms_model2)
+## marginal contrasts, the effect of onset timing within each target type, showing credible effect in both cases.
+emmeans(brms_model2, pairwise ~ fOnsetE | Explabel)
+
+#### Tests to compare the variance between Speech and Tone conditions
 aovmeans_clean2_vartest = select(aovmeans_clean2,sub_id,Explabel,fOnsetE,Shorter) # aovmeans_clean2 is the data average across Length
 aovmeans_clean2_vartest = aovmeans_clean2_vartest %>%
   pivot_wider(names_from = fOnsetE, values_from = Shorter) %>% 

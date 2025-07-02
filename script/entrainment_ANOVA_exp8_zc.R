@@ -5,18 +5,19 @@ library(broom)
 library(ggplot2)
 library(ggpubr)
 library('fastDummies')
+library(emmeans)
 library(effsize)
 library(lsr)
 
 ## sc updated 03/20/2023
 ## Load the data
-EXPtone = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8b_clean_n84.csv") 
-EXPspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8a_clean_n80.csv")
-EXPtoneasspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8c_clean_n88.csv") 
-EXPtoneasspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8c-s_clean_n20.csv") 
-EXPtoneasspeech = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/EXP8c-s_clean_n34.csv") 
-EXPspeech_pre = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8a_prescreen_clean_n80.csv")
-EXPspeech_disc = read.csv("/Users/t.z.cheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8a_discrimination_clean_n80.csv")
+EXPtone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8b_clean_n84.csv") 
+EXPspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8a_clean_n80.csv")
+EXPtoneasspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8c_clean_n88.csv") 
+EXPtoneasspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8c-s_clean_n20.csv") 
+EXPtoneasspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/EXP8c-s_clean_n34.csv") 
+EXPspeech_pre = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8a_prescreen_clean_n80.csv")
+EXPspeech_disc = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8a_discrimination_clean_n80.csv")
 
 ## EXP8: 3 conditions
 alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXPspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),
@@ -404,12 +405,13 @@ p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
 ## glmer on proportion short
 alldata_clean_allEXPlabel = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) 
-alldata_cleanGLM = filter(alldata_clean_allEXPlabel, Explabel!= "EXP8a") # could be EXP8a, EXP8b or EXP8c
+alldata_cleanGLM = filter(alldata_clean_allEXPlabel, Explabel!= "EXP8c") # could be EXP8a, EXP8b or EXP8c
 alldata_cleanGLM$Explabel = ifelse(alldata_cleanGLM$exp=="EXP8b",-0.5,0.5) # sum coding for the two conditions being compared, could be EXP8a, EXP8b or EXP8c
 
 # full
 lmall = glmer(Shorter ~ Explabel*fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_cleanGLM,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lmall) # Use early as the reference
+emmeans(lmall, pairwise ~ fOnsetE | Explabel)
 
 # reduce Target Duration (rLength)
 lmall_norLength = glmer(Shorter ~ Explabel*fOnsetE*rLength-rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_cleanGLM,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  

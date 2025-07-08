@@ -15,8 +15,8 @@ library(bayestestR)
 
 ######################################## Preprocessing ########################################
 ## Load the data
-# EXPspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9a_clean_n79.csv") # EXP9a_discrimination_clean_n79.csv
-# EXPtone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9b_clean_n76.csv") # EXP9b_discrimination_clean_n76.csv
+EXPspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9a_clean_n79.csv") # EXP9a_discrimination_clean_n79.csv
+EXPtone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9b_clean_n76.csv") # EXP9b_discrimination_clean_n76.csv
 EXPspeech = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp10ab/results/EXP10a_clean_n67.csv") # EXP9a_discrimination_clean_n79.csv
 EXPtone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp10ab/results/EXP10b_clean_n67.csv") # EXP9b_discrimination_clean_n76.csv
 
@@ -49,7 +49,7 @@ aovdata=alldata %>% #filter(comparison>=6) %>% ### if you limit speech to contin
   group_by(fOnsetE,Explabel,fOnset,rLength,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
 
 ## Very slow!!!!!!!
-# ggplot(aovdata,aes(x=rLength,y=Shorter,color=fOnsetR))+
+# ggplot(aovdata,aes(x=rLength,y=Shorter,color=fOnsetE))+
 #   scale_color_manual(values=c("red","blue","gray"))+
 #   geom_point()+
 #   # geom_line()+
@@ -73,8 +73,13 @@ colnames(aovmeans)[1] = 'Shorter'
 
 ## EXP9 flag outliers based on slope
 # who have reverse slopes, flat lines
-# '8db1d','074c2' press the same button across all experiment 
-aovmeans$outliers_slope = ifelse(aovmeans$slope>= 0 | aovmeans$sub_id == '8db1d' | aovmeans$sub_id == '074c2',1,0)
+# '8db1d','074c2' press the same button across whole experiment for EXP9
+# '03597','59a4e', '7369f', '82952', '83e6c', '906af' press the same button across whole experiment for EXP10
+aovmeans$outliers_slope = ifelse(aovmeans$slope>= 0 | aovmeans$sub_id == '8db1d' | aovmeans$sub_id == '074c2',1,0) # EXP9
+aovmeans$outliers_slope = ifelse(aovmeans$slope>= 0 | aovmeans$sub_id == '03597' | aovmeans$sub_id == '59a4e' | 
+                                   aovmeans$sub_id == '7369f' | aovmeans$sub_id == '82952'| 
+                                   aovmeans$sub_id == '83e6c' | aovmeans$sub_id == '906af',1,0) # EXP10
+
 outliers_slope_subj = filter(aovmeans,outliers_slope==1)
 aovmeans_clean1 = filter(aovmeans, !(sub_id %in% unique(outliers_slope_subj$sub_id)))
 
@@ -336,6 +341,11 @@ summary(lmall_speech) # Use early as the reference
 summary(lmall_tone) # Use early as the reference
 anova(lmall_speech,lmall_speech_noOnset)
 anova(lmall_tone,lmall_tone_noOnset)
+
+# effect size of nested model comparison: cohen's w
+N = length(unique(filter(alldata_clean,exp=="EXP9a")$sub_id)) ## is N is the subject number or subject x trial number
+w <- sqrt(modelcomp$'Chisq'[2] /N) 
+w
 
 #### Bayesian implementation of the logistic regression on proportion short
 ## comments from Reviewer 1

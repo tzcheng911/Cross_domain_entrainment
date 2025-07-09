@@ -310,7 +310,7 @@ p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 m = summary(aov(fifty~fOnsetE*Explabel+Error(sub_id/fOnsetE),data=aovmeans_clean2)) 
 
 #### logistic regression on proportion short
-alldata_clean = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) 
+alldata_clean = filter(alldata, sub_id %in% unique(aovmeans_clean1$sub_id)) 
 
 # full
 lmall = glmer(Shorter ~ Explabel*fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
@@ -341,6 +341,29 @@ summary(lmall_speech) # Use early as the reference
 summary(lmall_tone) # Use early as the reference
 anova(lmall_speech,lmall_speech_noOnset)
 anova(lmall_tone,lmall_tone_noOnset)
+
+## save the models
+## EXP9 
+saveRDS(lmall, file = "EXP9_glmer_full.RData") 
+saveRDS(lmall_speech, file = "EXP9_glmer_speech.RData") 
+saveRDS(lmall_tone, file = "EXP9_glmer_tone.RData") 
+saveRDS(lmall_speech_noOnset, file = "EXP9_glmer_speech_noOnset.RData") 
+saveRDS(lmall_tone_noOnset, file = "EXP9_glmer_tone_noOnset.RData") 
+
+## EXP10
+saveRDS(lmall, file = "EXP9_glmer_full.RData") 
+saveRDS(lmall_speech, file = "EXP9_glmer_speech.RData") 
+saveRDS(lmall_tone, file = "EXP9_glmer_tone.RData") 
+saveRDS(lmall_speech_noOnset, file = "EXP9_glmer_speech_noOnset.RData") 
+saveRDS(lmall_tone_noOnset, file = "EXP9_glmer_tone_noOnset.RData") 
+
+# effect size comparison: confidence interval wald test
+confint(lmall_speech, level = 0.95, method = "Wald")
+confint(lmall_tone, level = 0.95, method = "Wald")
+
+n_comparison = 4
+confint(lmall_speech, level = 1-(.05/n_comparison), method = "Wald") # control for multiple comparisons
+confint(lmall_tone, level = 1-(.05/n_comparison), method = "Wald") # control for multiple comparisons
 
 # effect size of nested model comparison: cohen's w
 N = length(unique(filter(alldata_clean,exp=="EXP9a")$sub_id)) ## is N is the subject number or subject x trial number

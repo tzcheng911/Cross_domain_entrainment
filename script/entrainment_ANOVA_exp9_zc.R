@@ -310,7 +310,7 @@ p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 m = summary(aov(fifty~fOnsetE*Explabel+Error(sub_id/fOnsetE),data=aovmeans_clean2)) 
 
 #### logistic regression on proportion short
-alldata_clean = filter(alldata, sub_id %in% unique(aovmeans_clean1$sub_id)) 
+alldata_clean = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) 
 
 # full
 lmall = glmer(Shorter ~ Explabel*fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  

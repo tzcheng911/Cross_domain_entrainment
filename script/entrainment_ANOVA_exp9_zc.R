@@ -46,7 +46,7 @@ alldata$OnsetHelm2=ifelse(alldata$fOnsetR=="early",0,ifelse(alldata$fOnsetR=="on
 
 ## sort the data to be subjects x onset for each experiment
 aovdata=alldata %>% #filter(comparison>=6) %>% ### if you limit speech to continua 1-5, no diffs. strong for 6-8
-  group_by(fOnsetE,Explabel,fOnset,rLength,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
+  group_by(fOnsetE,Explabel,fOnset,Length,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
 
 ## Very slow!!!!!!!
 # ggplot(aovdata,aes(x=rLength,y=Shorter,color=fOnsetE))+
@@ -60,7 +60,7 @@ aovdata=alldata %>% #filter(comparison>=6) %>% ### if you limit speech to contin
 # run logistic fit on each subject and condition
 aovmeans=aovdata %>% 
   group_by(sub_id,fOnsetE,Explabel) %>% 
-  do(glmfit = glm(Shorter ~ rLength,data =.,family=binomial())) # change rLength to Length for visualization
+  do(glmfit = glm(Shorter ~ Length,data =.,family=binomial())) # change rLength to Length for visualization
 
 # get the coefficients 
 aovmeans = aovmeans %>%
@@ -112,7 +112,7 @@ aovdata_outlier_50 = filter(aovdata, sub_id %in% unique(outliers_subj_50$sub_id)
 aovdata_clean$fOnsetE = factor(aovdata_clean$fOnsetE, levels = c("early","ontime","late"))
 aovdata_outlier_slope$fOnsetE = factor(aovdata_outlier_slope$fOnsetE, levels = c("early","ontime","late"))
 aovdata_outlier_50$fOnsetE = factor(aovdata_outlier_50$fOnsetE, levels = c("early","ontime","late"))
-aovdata_clean_plot = aovdata_clean %>% group_by(rLength,fOnsetE,Explabel) %>% summarise(mShorter=mean(Shorter),SD=sd(Shorter),Nsubs=n_distinct(sub_id))
+aovdata_clean_plot = aovdata_clean %>% group_by(Length,fOnsetE,Explabel) %>% summarise(mShorter=mean(Shorter),SD=sd(Shorter),Nsubs=n_distinct(sub_id)) # change rLength to Length for visualization
 aovdata_clean_plot$fOnsetE = factor(aovdata_clean_plot$fOnsetE, levels = c("early","ontime","late"))
 aovdata_clean$Explabel = factor(aovdata_clean$Explabel, levels = c("EXP9a","EXP9b"))
 aovdata_outlier_slope$Explabel = factor(aovdata_outlier_slope$Explabel, levels = c("EXP9a","EXP9b"))
@@ -122,7 +122,7 @@ aovdata_clean_plot$Explabel = factor(aovdata_clean_plot$Explabel, levels = c("EX
 testSD = aovdata_clean_plot %>% group_by(fOnsetE,Explabel) %>% summarise(mSD=mean(SD))
 
 # plot the results
-ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetE,linetype=Explabel,group=interaction(fOnsetE,Explabel)))+
+ggplot(aovdata_clean_plot,aes(x=Length,y=mShorter,color=fOnsetE,linetype=Explabel,group=interaction(fOnsetE,Explabel)))+ # change rLength to Length for visualization
   geom_point()+
   scale_x_continuous(breaks = seq(1, 8, by = 1))+
   geom_line()+
@@ -131,7 +131,7 @@ ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetE,linetype=Explab
   theme_bw()
 
 # Very slow!!! individual plot for clean data
-ggplot(aovdata_outlier_50,aes(x=rLength,y=Shorter,color=fOnsetE,shape=Explabel))+
+ggplot(aovdata_clean,aes(x=Length,y=Shorter,color=fOnsetE,shape=Explabel))+ # change rLength to Length for visualization
   scale_color_manual(values=c("red","green","blue"))+
   geom_point()+
   # geom_line()+
@@ -161,19 +161,19 @@ ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
   theme_bw()
 
 ## bar plot
-# ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
-#   geom_bar(stat="summary", fun.y = "mean", position='dodge') +
-#   stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
-#   ylim(0,0.8) + 
-#   geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
-#   theme_bw()
-# 
-# ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
-#   geom_bar(stat="summary", fun.y = "mean", position='dodge') +
-#   stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
-#   ylim(0,8) + 
-#   geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
-#   theme_bw()
+ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
+  geom_bar(stat="summary", fun.y = "mean", position='dodge') +
+  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
+  ylim(0,0.8) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
+  theme_bw()
+
+ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
+  geom_bar(stat="summary", fun.y = "mean", position='dodge') +
+  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
+  ylim(0,8) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
+  theme_bw()
 
 ## EXP9 Final sample size
 exp9a = filter(aovmeans_clean2,Explabel == "Speech")
@@ -253,14 +253,14 @@ p
 cohen.d(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$Shorter,paired=T)
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
-p = t.test(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
-p
-cohen.d(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
-p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
-
 p = t.test(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
 p
 cohen.d(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="early")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
+p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
+
+p = t.test(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
+p
+cohen.d(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
 #### overall ANOVA on 50% point
@@ -351,11 +351,11 @@ saveRDS(lmall_speech_noOnset, file = "EXP9_glmer_speech_noOnset.RData")
 saveRDS(lmall_tone_noOnset, file = "EXP9_glmer_tone_noOnset.RData") 
 
 ## EXP10
-saveRDS(lmall, file = "EXP9_glmer_full.RData") 
-saveRDS(lmall_speech, file = "EXP9_glmer_speech.RData") 
-saveRDS(lmall_tone, file = "EXP9_glmer_tone.RData") 
-saveRDS(lmall_speech_noOnset, file = "EXP9_glmer_speech_noOnset.RData") 
-saveRDS(lmall_tone_noOnset, file = "EXP9_glmer_tone_noOnset.RData") 
+saveRDS(lmall, file = "EXP10_glmer_full.RData") 
+saveRDS(lmall_speech, file = "EXP10_glmer_speech.RData") 
+saveRDS(lmall_tone, file = "EXP10_glmer_tone.RData") 
+saveRDS(lmall_speech_noOnset, file = "EXP10_glmer_speech_noOnset.RData") 
+saveRDS(lmall_tone_noOnset, file = "EXP10_glmer_tone_noOnset.RData") 
 
 # effect size comparison: confidence interval wald test
 confint(lmall_speech, level = 0.95, method = "Wald")

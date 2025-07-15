@@ -15,7 +15,7 @@ EXP = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment
 ## Preprocessing
 # Filter the main task
 # Coding response to 0: out of time, and 1: in time
-# mutate the conditions: stimuli (ad/at, lab/lap, tone/tone1), delay (metronome is 0,30,60,90,120 ms behind the sound), len (short 1, long 8)
+# mutate the conditions: stimuli (ad/at, tone/tone1), delay (metronome is 0,30,60,90,120 ms behind the sound), len (short 1, long 8)
 mainEXP = filter(EXP, trial_template == "maintaskTrials") # select the main trials after 8 examples
 length(unique(EXP$participant_id)) # how many subjects
 mainEXP$response_value=ifelse(mainEXP$response_value=="Out of time",0,1)

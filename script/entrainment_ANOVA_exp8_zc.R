@@ -415,12 +415,12 @@ summary(lmall) # Use early as the reference
 emmeans(lmall, pairwise ~ fOnsetE | Explabel)
 
 # reduce Target Duration (rLength)
-lmall_norLength = glmer(Shorter ~ Explabel*fOnsetE*rLength-rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_cleanGLM,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+lmall_norLength = glmer(Shorter ~ Explabel*fOnsetE*rLength-rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean_allEXPlabel,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lmall_norLength) # Use early as the reference
 anova(lmall,lmall_norLength)
 
 # reduce 2 way
-lmall_no2way = glmer(Shorter ~ Explabel*fOnsetE*rLength-Explabel:fOnsetE  + (1 + fOnsetE*rLength|sub_id),data= alldata_cleanGLM,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+lmall_no2way = glmer(Shorter ~ Explabel*fOnsetE*rLength-Explabel:fOnsetE  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean_allEXPlabel,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lmall_no2way) # Use early as the reference
 anova(lmall,lmall_no2way)
 
@@ -443,6 +443,31 @@ summary(lmall_toneasspeech) # Use early as the reference
 anova(lmall_speech,lmall_speech_noOnset)
 anova(lmall_tone,lmall_tone_noOnset)
 anova(lmall_toneasspeech,lmall_toneasspeech_noOnset)
+
+## EXP8 
+saveRDS(lmall, file = "EXP8_glmer_full_speech.RData") 
+saveRDS(lmall_norLength, file = "EXP8_glmer_full_norLength.RData") 
+saveRDS(lmall_no2way, file = "EXP8_glmer_full_no2way.RData") 
+saveRDS(lmall_no3way, file = "EXP8_glmer_full_no3way.RData") 
+
+saveRDS(lmall, file = "EXP8_glmer_full_ab.RData") 
+saveRDS(lmall, file = "EXP8_glmer_full_ac.RData") 
+saveRDS(lmall, file = "EXP8_glmer_full_bc.RData") 
+saveRDS(lmall_no2way, file = "EXP8_glmer_full_ab_no2way.RData") 
+saveRDS(lmall_no2way, file = "EXP8_glmer_full_ac_no2way.RData") 
+saveRDS(lmall_no2way, file = "EXP8_glmer_full_bc_no2way.RData") 
+
+saveRDS(lmall_speech, file = "EXP8_glmer_speech.RData") 
+saveRDS(lmall_tone, file = "EXP8_glmer_tone.RData") 
+saveRDS(lmall_toneasspeech, file = "EXP8_glmer_toneasspeech.RData") 
+saveRDS(lmall_speech_noOnset, file = "EXP8_glmer_speech_noOnset.RData") 
+saveRDS(lmall_tone_noOnset, file = "EXP8_glmer_tone_noOnset.RData") 
+saveRDS(lmall_toneasspeech_noOnset, file = "EXP8_glmer_toneasspeech_noOnset.RData")
+
+## effect size comparison: confidence interval wald test
+confint(lmall_speech, level = 0.95, method = "Wald")
+confint(lmall_tone, level = 0.95, method = "Wald")
+confint(lmall_toneasspeech, level = 0.95, method = "Wald")
 
 ## Tests to compare the variance between Speech and Tone conditions
 aovmeans_clean2_vartest = select(aovmeans_clean2,sub_id,Explabel,fOnsetR,Shorter) # aovmeans_clean2 is the data average across Length

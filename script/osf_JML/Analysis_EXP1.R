@@ -13,6 +13,8 @@ library(lsr)
 EXPspeech = read.csv("EXP1a_clean_n80.csv")
 EXPtone = read.csv("EXP1b_clean_n84.csv") 
 EXPtoneasspeech = read.csv("EXP1c_clean_n88.csv") 
+EXPtoneasspeech = read.csv("EXP1c-s_clean_n20.csv") 
+EXPtoneasspeech = read.csv("EXP1c-s_clean_n34.csv") 
 
 ## Combine the 3 conditions
 alldata=rbind(select(EXPtone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXPspeech,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),
@@ -217,6 +219,15 @@ anova(lm_Sarah,lm_Sarah_nointeraction)
 # lm_Sarah_nointeraction   24 51547 51761 -25749    51499                       
 # lm_Sarah                 28 51546 51796 -25745    51490 8.7345  4    0.06809 . <-- marginal 'omnibus' 2-way
 
+lm_Sarah_no3wayinteraction = glmer(Shorter ~ speechVSothers*(earlyVSontime+earlyVSlate)*rLength  -
+                                     (speechVSothers+toneVStoneasspeech):(earlyVSontime+earlyVSlate):rLength + # 3 way interaction 
+                                     (1 + rLength + earlyVSlate + earlyVSontime | sub_id),
+                                   data= alldata_clean_allEXPlabel,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+anova(lm_Sarah,lm_Sarah_no3wayinteraction) 
+# npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)
+# lm_Sarah_no3wayinteraction   20 51537 51715 -25748    51497                     
+# lm_Sarah                     28 51546 51796 -25745    51490 6.7657  8     0.5621 <-- no 'omnibus' 3-way
+
 lm_Sarah_noSimpleinteraction = glmer(Shorter ~ (speechVSothers+toneVStoneasspeech)*(earlyVSontime+earlyVSlate)*rLength  -
                                        (speechVSothers:earlyVSlate) + # i.e., the targetType x delay interaction 
                                        (1 + (earlyVSontime+earlyVSlate+rLength)|sub_id),
@@ -235,6 +246,15 @@ anova(lm_Sarah,lm_Sarah_noSpeechTerminteraction)
 # npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)  
 # lm_Sarah_noSpeechTerminteraction   26 51550 51782 -25749    51498                       
 # lm_Sarah                           28 51546 51796 -25745    51490 8.4924  2    0.01432 * <-- full version: speech vs other models, Delay differences
+
+lm_Zoe_noLength = glmer(Shorter ~ (speechVSothers+toneVStoneasspeech)*(earlyVSontime+earlyVSlate)*rLength  -
+                          rLength + 
+                          (1 + (earlyVSontime+earlyVSlate+rLength)|sub_id),
+                        data= alldata_clean_allEXPlabel,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+anova(lm_Sarah,lm_Zoe_noLength)
+# npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)    
+# lm_Zoe_noLength   27 51895 52136 -25921    51841                         
+# lm_Sarah          28 51546 51796 -25745    51490 351.22  1  < 2.2e-16 ***
 
 # FOR SIMPLICITY THE SUBMODELS RETAIN THE RANDOM EFFECTS STRUCTURE OF THE MAIN MODEL
 alldata_clean_allEXPlabel=alldata_clean_allEXPlabel %>%
@@ -282,16 +302,17 @@ lmTnTas=glmer(Shorter ~ toneIsHigher*(earlyVSontime+earlyVSlate)*rLength  +
                 (1 + earlyVSontime+earlyVSlate+rLength|sub_id),
               data= filter(alldata_clean_allEXPlabel,exp!="EXP8a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lmTnTas)
-# toneIsHigher:earlyVSontime         -0.031138   0.077610  -0.401    0.688    
-# toneIsHigher:earlyVSlate           -0.005425   0.084235  -0.064    0.949   
+# toneIsHigher:earlyVSontime         -0.02860    0.07695  -0.372    0.710    
+# toneIsHigher:earlyVSlate           -0.00295    0.08343  -0.035    0.972    
 
 lmTnTasNoInteraction=glmer(Shorter ~ toneIsHigher*(earlyVSontime+earlyVSlate)*rLength  -
                              toneIsHigher:(earlyVSontime+earlyVSlate) +
                              (1 + earlyVSontime+earlyVSlate+rLength|sub_id),
                            data= filter(alldata_clean_allEXPlabel,exp!="EXP8a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 anova(lmTnTas,lmTnTasNoInteraction)
-# lmTnTasNoInteraction   20 37244 37414 -18602    37204                     
-# lmTnTas                22 37248 37435 -18602    37204 0.2027  2     0.9036
+# npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)
+# lmTnTasNoInteraction   20 37641 37812 -18801    37601                     
+# lmTnTas                22 37645 37833 -18800    37601 0.1863  2      0.911
 
 
 # speech only
@@ -316,16 +337,17 @@ lmTn=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  +
              (1 + earlyVSontime+earlyVSlate+rLength|sub_id),
            data= filter(alldata_clean_allEXPlabel,exp=="EXP8b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lmTn)
-# earlyVSontime         -0.202570   0.054027  -3.749 0.000177 ***
-# earlyVSlate           -0.324832   0.059479  -5.461 4.73e-08 ***
+# earlyVSontime         -0.201415   0.053157  -3.789 0.000151 ***
+# earlyVSlate           -0.322198   0.058427  -5.515 3.50e-08 ***
 
 lmTnNoOT=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  -
                  (earlyVSontime+earlyVSlate) + 
                  (1 + earlyVSontime+earlyVSlate+rLength|sub_id),
                data= filter(alldata_clean_allEXPlabel,exp=="EXP8b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 anova(lmTn,lmTnNoOT)
-# lmTnNoOT   14 20582 20693 -10277    20554                         
-# lmTn       16 20561 20688 -10264    20529 25.534  2  2.854e-06 ***
+# npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)    
+# lmTnNoOT   14 20980 21091 -10476    20952                         
+# lmTn       16 20958 21085 -10463    20926 26.013  2  2.246e-06 ***
 
 lmTas=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  + 
               (1 + earlyVSontime+earlyVSlate+rLength|sub_id),

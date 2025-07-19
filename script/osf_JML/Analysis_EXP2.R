@@ -29,12 +29,12 @@ alldata$fOnsetE = relevel(alldata$fOnset, ref="early") # make early condition th
 
 ## Sort the data to be subjects x onset for each condition
 aovdata=alldata %>% 
-  group_by(fOnsetE,Explabel,fOnset,rLength,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
+  group_by(fOnsetE,Explabel,fOnset,Length,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
 
 ## Run logistic fit on each subject and condition
 aovmeans=aovdata %>% 
   group_by(sub_id,fOnsetE,Explabel) %>% 
-  do(glmfit = glm(Shorter ~ rLength,data =.,family=binomial())) # change rLength to Length for visualization
+  do(glmfit = glm(Shorter ~ Length,data =.,family=binomial())) # change rLength to Length for visualization
 
 ## Get the coefficients 
 aovmeans = aovmeans %>%
@@ -127,7 +127,6 @@ length(unique(exp9b$sub_id))
 ######################################################## Statistical test ######################################################## 
 ## Run logistic mixed-effect model 
 alldata_clean = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) 
-alldata_clean$Explabel = ifelse(alldata_clean$Explabel=="EXP9a",-0.5,0.5) # sum coding for the two conditions being compared
 
 # SARAH recoding some things
 alldata_clean = alldata_clean %>%
@@ -159,108 +158,88 @@ summary(m) # random fx retained:     (1 + rLength | sub_id)
 
 # buildmer says drop all but the single rand fx slopes (no ranfx interactions)
 lm_Sarah = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  + 
-                   (1 + earlyVSontime + earlyVSlate + rLength|sub_id),
+                   (1 + rLength|sub_id),
                  data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lm_Sarah)
 # Number of obs: 40608, groups:  sub_id, 141
 # 
 # Fixed effects:
 #   Estimate Std. Error z value Pr(>|z|)    
-#   (Intercept)                        -0.368013   0.055163  -6.671 2.53e-11 ***
-#   speechVStone                       -0.376768   0.110175  -3.420 0.000627 ***
-#   earlyVSontime                      -0.146616   0.034383  -4.264 2.01e-05 ***
-#   earlyVSlate                        -0.236021   0.036514  -6.464 1.02e-10 ***
-#   rLength                            -1.702028   0.062670 -27.159  < 2e-16 ***
-#   speechVStone:earlyVSontime         -0.115722   0.067378  -1.718 0.085885 .  
-#   speechVStone:earlyVSlate           -0.182067   0.070923  -2.567 0.010256 *  
-#   speechVStone:rLength                0.017181   0.124838   0.138 0.890535    
-#   earlyVSontime:rLength              -0.005214   0.037281  -0.140 0.888762    
-#   earlyVSlate:rLength                -0.040434   0.037599  -1.075 0.282185    
-#   speechVStone:earlyVSontime:rLength -0.134020   0.072364  -1.852 0.064021 .  
-#   speechVStone:earlyVSlate:rLength   -0.267182   0.073156  -3.652 0.000260 ***
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+#   (Intercept)                        -0.36668    0.05515  -6.649 2.96e-11 ***
+#   speechVStone                       -0.37450    0.11011  -3.401 0.000671 ***
+#   earlyVSontime                      -0.12274    0.03094  -3.967 7.29e-05 ***
+#   earlyVSlate                        -0.20717    0.03119  -6.643 3.08e-11 ***
+#   rLength                            -1.69875    0.06243 -27.210  < 2e-16 ***
+#   speechVStone:earlyVSontime         -0.10879    0.06187  -1.758 0.078679 .  
+#   speechVStone:earlyVSlate           -0.17458    0.06236  -2.799 0.005119 ** 
+#   speechVStone:rLength                0.02022    0.12441   0.163 0.870900    
+#   earlyVSontime:rLength               0.01729    0.03607   0.479 0.631596    
+#   earlyVSlate:rLength                -0.01773    0.03638  -0.487 0.626020    
+#   speechVStone:earlyVSontime:rLength -0.13583    0.07212  -1.884 0.059630 .  
+#   speechVStone:earlyVSlate:rLength   -0.26587    0.07275  -3.655 0.000258 ***
 
 lm_Sarah_nointeraction = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  -
                                  speechVStone:(earlyVSontime+earlyVSlate) + 
-                                 (1 + earlyVSontime + earlyVSlate + rLength|sub_id),
+                                 (1 + rLength|sub_id),
                                data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 
 anova(lm_Sarah,lm_Sarah_nointeraction)      
-# npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)
-# lm_Sarah_nointeraction   20 39030 39203 -19495    38990                       
-# lm_Sarah                 22 39028 39217 -19492    38984 6.5285  2    0.03823 *
+# npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)  
+# lm_Sarah_nointeraction   13 39034 39146 -19504    39008                       
+# lm_Sarah                 15 39030 39160 -19500    39000 7.9641  2    0.01865 *
+
+lm_Sarah_no3wayinteraction = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  -
+                                     speechVStone:(earlyVSontime+earlyVSlate):rLength + # 3 way interaction 
+                                     (1 + rLength|sub_id),
+                                   data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
+anova(lm_Sarah,lm_Sarah_no3wayinteraction) 
+# npar   AIC   BIC logLik deviance Chisq Df Pr(>Chisq)   
+# lm_Sarah_no3wayinteraction   13 39040 39152 -19507    39014                       
+# lm_Sarah                     15 39030 39160 -19500    39000 13.22  2   0.001347 **
 
 lm_Zoe_noLength = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  -
                           rLength + 
-                          (1 + earlyVSontime+earlyVSlate+rLength|sub_id),
+                          (1 + rLength|sub_id),
                         data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-
 anova(lm_Sarah,lm_Zoe_noLength)
-#                 npar   AIC   BIC  logLik deviance  Chisq Df Pr(>Chisq)
-# lm_Zoe_noLength   21 39282 39463 -19620    39240                         
-# lm_Sarah          22 39028 39217 -19492    38984 256.68  1  < 2.2e-16 ***
+# npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)    
+# lm_Zoe_noLength   14 39286 39407 -19629    39258                         
+# lm_Sarah          15 39030 39160 -19500    39000 258.05  1  < 2.2e-16 ***
 
 # speech only
 lmSp=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  + 
-             (1 + (earlyVSontime+earlyVSlate)*rLength|sub_id), # note that Sarah used addition instead of interaction in the original model
+             (1 + rLength|sub_id), # note that Sarah used addition instead of interaction in the original model
            data= filter(alldata_clean,exp=="EXP9a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lmSp)
-# earlyVSontime         -0.08083    0.04642  -1.741  0.08164 .  
-# earlyVSlate           -0.13766    0.04657  -2.956  0.00312 ** 
-# rLength               -1.72187    0.09214 -18.687  < 2e-16 ***
+# earlyVSontime         -0.06854    0.04363  -1.571  0.11622    
+# earlyVSlate           -0.12025    0.04356  -2.760  0.00577 ** 
+# rLength               -1.72147    0.09206 -18.700  < 2e-16 ***
 
 lmSpNoOT=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  -
                  (earlyVSontime+earlyVSlate) + 
-                 (1 + (earlyVSontime+earlyVSlate)*rLength|sub_id),
+                 (1 + rLength|sub_id),
                data= filter(alldata_clean,exp=="EXP9a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 anova(lmSp,lmSpNoOT)
-
-# Data: filter(alldata_clean, exp == "EXP9a")
-# Models:
-#   lmSpNoOT: Shorter ~ (earlyVSontime + earlyVSlate) * rLength - (earlyVSontime + earlyVSlate) + (1 + earlyVSontime + earlyVSlate + rLength | sub_id)
-# lmSp: Shorter ~ (earlyVSontime + earlyVSlate) * rLength + (1 + earlyVSontime + earlyVSlate + rLength | sub_id)
 # npar   AIC   BIC  logLik deviance  Chisq Df Pr(>Chisq)  
-# lmSpNoOT   14 19641 19752 -9806.7    19613                       
-# lmSp       16 19637 19764 -9802.5    19605 8.5135  2    0.01417 *
-
-# Data: filter(alldata_clean, exp == "EXP9a")
-# Models:
-#   lmSpNoOT: Shorter ~ (earlyVSontime + earlyVSlate) * rLength - (earlyVSontime + earlyVSlate) + (1 + (earlyVSontime + earlyVSlate) * rLength | sub_id)
-# lmSp: Shorter ~ (earlyVSontime + earlyVSlate) * rLength + (1 + (earlyVSontime + earlyVSlate) * rLength | sub_id)
-# npar   AIC   BIC  logLik deviance  Chisq Df Pr(>Chisq)  
-# lmSpNoOT   25 19653 19851 -9801.6    19603                       
-# lmSp       27 19648 19862 -9797.2    19594 8.8264  2    0.01212 *
+# lmSpNoOT    7 19630 19686 -9808.2    19616                       
+# lmSp        9 19627 19698 -9804.4    19609 7.6081  2    0.02228 *
 
 lmTn=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  + 
-             (1 + (earlyVSontime+earlyVSlate)*rLength|sub_id),
+             (1 + rLength|sub_id),
            data= filter(alldata_clean,exp=="EXP9b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lmTn)
-# earlyVSontime         -0.20352    0.05451  -3.733 0.000189 ***
-# earlyVSlate           -0.33550    0.05599  -5.992 2.08e-09 ***
-# rLength               -1.68795    0.08641 -19.534  < 2e-16 ***
+# earlyVSontime         -0.17659    0.04389  -4.024 5.73e-05 ***
+# earlyVSlate           -0.29357    0.04465  -6.575 4.86e-11 ***
+# rLength               -1.68083    0.08567 -19.619  < 2e-16 ***
 
 lmTnNoOT=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  -
                  (earlyVSontime+earlyVSlate) + 
-                 (1 + (earlyVSontime+earlyVSlate)*rLength|sub_id),
+                 (1 + rLength|sub_id),
                data= filter(alldata_clean,exp=="EXP9b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 anova(lmTn,lmTnNoOT)
-# Data: filter(alldata_clean, exp == "EXP9b")
-# Models:
-#   lmTnNoOT: Shorter ~ (earlyVSontime + earlyVSlate) * rLength - (earlyVSontime + earlyVSlate) + (1 + earlyVSontime + earlyVSlate + rLength | sub_id)
-# lmTn: Shorter ~ (earlyVSontime + earlyVSlate) * rLength + (1 + earlyVSontime + earlyVSlate + rLength | sub_id)
-# npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)    
-# lmTnNoOT   14 19418 19529  -9695    19390                         
-# lmTn       16 19390 19517  -9679    19358 31.935  2  1.163e-07 ***
-
-# Data: filter(alldata_clean, exp == "EXP9b")
-# Models:
-#   lmTnNoOT: Shorter ~ (earlyVSontime + earlyVSlate) * rLength - (earlyVSontime + earlyVSlate) + (1 + (earlyVSontime + earlyVSlate) * rLength | sub_id)
-# lmTn: Shorter ~ (earlyVSontime + earlyVSlate) * rLength + (1 + (earlyVSontime + earlyVSlate) * rLength | sub_id)
 # npar   AIC   BIC  logLik deviance  Chisq Df Pr(>Chisq)    
-# lmTnNoOT   25 19434 19632 -9692.1    19384                         
-# lmTn       27 19407 19621 -9676.7    19353 30.855  2  1.995e-07 ***
-
+# lmTnNoOT    7 19435 19490 -9710.5    19421                         
+# lmTn        9 19395 19466 -9688.5    19377 43.974  2  2.825e-10 ***
 ################################################################################
 ################################################################################
 #################      This is the end of the Sarah stuff      #################

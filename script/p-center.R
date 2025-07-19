@@ -10,6 +10,7 @@ library(lsr)
 library(stringr)
 
 ## Load the data
+EXP = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/p-center/results/pilot_pcenter_results.csv") 
 EXP = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp10ab/p-center/results/session-67ef60de6de0902719c5faef-data.csv") 
 
 ## Preprocessing
@@ -35,15 +36,46 @@ mainEXPmeans_subj=mainEXP %>%
 mainEXPmeans = mainEXPmeans_subj %>%
   group_by(stimuli,delay) %>%
   summarize(mean = mean(meanResp), SD = sd(meanResp))
-
 length(unique(mainEXP$participant_id))
 
-## Visualization
-ggplot(mainEXPmeans,aes(x=delay,y=mean,color=stimuli, group=interaction(stimuli)))+
-  geom_line(position=position_dodge(width=0.1))+
-  geom_point(position=position_dodge(width=0.1))+
-  theme_bw() +
+## Visualization for EXP9
+## Rename the legend for plotting
+mainEXPmeans$stimuli = ifelse(mainEXPmeans$stimuli == "add","at/add",
+                              ifelse(mainEXPmeans$stimuli == "lab","lap/lab","short/long tone"))
+mainEXPmeans$stimuli = factor(mainEXPmeans$stimuli, levels = c("at/add","lap/lab","short/long tone"))
+
+ggplot(mainEXPmeans,aes(x=delay,y=mean,color=stimuli, linetype = stimuli,group=stimuli))+
+  geom_line(position=position_dodge(width=0.1),size = 1.2)+
+  geom_point(position=position_dodge(width=0.1),size = 2)+
+  labs(x = "Onset Time Difference Between Sounds and Clicks (ms)", y = "Proportion of Responding Beat Aligned")+
+  scale_colour_grey(name = "Auditory Targets")+
+    scale_linetype_manual(
+    name = "Auditory Targets",
+    values = c("at/add" = "dashed", "lap/lab" = "dotted","short/long tone" = "solid")
+    ) +
+  theme_minimal(base_size = 24) +
   ylim(0,1) + 
-  scale_colour_grey()+
   geom_errorbar(aes(ymin=mean-SD/sqrt(12),ymax=mean+SD/sqrt(12)),width=0,position=position_dodge(width=0.1))
-                
+
+## Visualization for EXP10
+mainEXPmeans$stimuli = ifelse(mainEXPmeans$stimuli == "add","Speech targets",
+                              ifelse(mainEXPmeans$stimuli == "tone","Tone targets",
+                                     ifelse(mainEXPmeans$stimuli == "addentrainer_","Speech precursors",
+                                            "Tone precursors")))
+mainEXPmeans$stimuli = factor(mainEXPmeans$stimuli, levels = c("Tone targets","Speech targets","Tone precursors","Speech precursors"))
+
+ggplot(mainEXPmeans,aes(x=delay,y=mean,color=stimuli, linetype = stimuli,group=stimuli))+
+  geom_line(position=position_dodge(width=0.1),size = 1.2)+
+  geom_point(position=position_dodge(width=0.1),size = 2)+
+  labs(x = "Onset Time Difference Between Sounds and Clicks (ms)", y = "Proportion of Responding Beat Aligned")+
+  scale_colour_manual(
+    name = "Auditory Stimuli",
+    values = c("black", "grey","black",  "grey")
+  ) +
+  scale_linetype_manual(
+    name = "Auditory Stimuli",
+    values = c("Tone targets" = "solid", "Speech targets" = "solid","Tone precursors" = "dotted", "Speech precursors" = "dotted")
+  ) +
+  theme_minimal(base_size = 24) +
+  ylim(0,1) + 
+  geom_errorbar(aes(ymin=mean-SD/sqrt(12),ymax=mean+SD/sqrt(12)),width=0,position=position_dodge(width=0.1))

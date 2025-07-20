@@ -133,7 +133,7 @@ length(unique(exp8c$sub_id))
 
 ######################################################## Statistical test ######################################################## 
 ## Run logistic mixed-effect model 
-alldata_clean_allEXPlabel = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) 
+alldata_clean_allEXPlabel = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) ## change to aovmeans_clean1 to include 50% point outliers 
 
 # Do paired comparison of Tone vs. Speech; Tone vs. ToneasSpeech; Speech vs. ToneasSpeech
 # Run the Full and Reduced 2-way models on alldata_cleanGLM to see the interaction

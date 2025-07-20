@@ -126,7 +126,7 @@ length(unique(exp9b$sub_id))
 
 ######################################################## Statistical test ######################################################## 
 ## Run logistic mixed-effect model 
-alldata_clean = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) 
+alldata_clean = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) ## change to aovmeans_clean1 to include 50% point outliers 
 
 # SARAH recoding some things
 alldata_clean = alldata_clean %>%

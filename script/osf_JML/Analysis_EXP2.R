@@ -29,12 +29,12 @@ alldata$fOnsetE = relevel(alldata$fOnset, ref="early") # make early condition th
 
 ## Sort the data to be subjects x onset for each condition
 aovdata=alldata %>% 
-  group_by(fOnsetE,Explabel,fOnset,Length,sub_id) %>% summarise(Shorter=mean(Shorter)) # change rLength to Length for visualization
+  group_by(fOnsetE,Explabel,fOnset,Length,sub_id) %>% summarise(Shorter=mean(Shorter)) # Important!! Use Length for plotting (Length 1-8, instead of the scaled Length -1.52 - 1.52 for easier visualization), use rLength for fitting model & ANOVA test
 
 ## Run logistic fit on each subject and condition
 aovmeans=aovdata %>% 
   group_by(sub_id,fOnsetE,Explabel) %>% 
-  do(glmfit = glm(Shorter ~ Length,data =.,family=binomial())) # change rLength to Length for visualization
+  do(glmfit = glm(Shorter ~ Length,data =.,family=binomial())) # Important!! Use Length for plotting (Length 1-8, instead of the scaled Length -1.52 - 1.52 for easier visualization), use rLength for fitting model & ANOVA test
 
 ## Get the coefficients 
 aovmeans = aovmeans %>%
@@ -72,14 +72,15 @@ aovdata_outlier_50 = filter(aovdata, sub_id %in% unique(outliers_subj_50$sub_id)
 aovdata_clean$fOnsetE = factor(aovdata_clean$fOnsetE, levels = c("early","ontime","late"))
 aovdata_outlier_slope$fOnsetE = factor(aovdata_outlier_slope$fOnsetE, levels = c("early","ontime","late"))
 aovdata_outlier_50$fOnsetE = factor(aovdata_outlier_50$fOnsetE, levels = c("early","ontime","late"))
-aovdata_clean_plot = aovdata_clean %>% group_by(rLength,fOnsetE,Explabel) %>% summarise(mShorter=mean(Shorter),SD=sd(Shorter),Nsubs=n_distinct(sub_id))
+aovdata_clean_plot = aovdata_clean %>% group_by(Length,fOnsetE,Explabel) %>% summarise(mShorter=mean(Shorter),SD=sd(Shorter),Nsubs=n_distinct(sub_id)) # Important!! Use Length for plotting (Length 1-8, instead of the scaled Length -1.52 - 1.52 for easier visualization), use rLength for fitting model & ANOVA test
 aovdata_clean_plot$fOnsetE = factor(aovdata_clean_plot$fOnsetE, levels = c("early","ontime","late"))
 aovdata_clean$Explabel = factor(aovdata_clean$Explabel, levels = c("EXP9a","EXP9b"))
 aovdata_outlier_slope$Explabel = factor(aovdata_outlier_slope$Explabel, levels = c("EXP9a","EXP9b"))
 aovdata_outlier_50$Explabel = factor(aovdata_outlier_50$Explabel, levels = c("EXP9a","EXP9b"))
 aovdata_clean_plot$Explabel = factor(aovdata_clean_plot$Explabel, levels = c("EXP9a","EXP9b"))
 
-ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetE,linetype=Explabel,group=interaction(fOnsetE,Explabel)))+
+# Plot averaged curves of the clean data
+ggplot(aovdata_clean_plot,aes(x=Length,y=mShorter,color=fOnsetE,linetype=Explabel,group=interaction(fOnsetE,Explabel)))+
   geom_point()+
   scale_x_continuous(breaks = seq(1, 8, by = 1))+
   geom_line()+
@@ -88,22 +89,22 @@ ggplot(aovdata_clean_plot,aes(x=rLength,y=mShorter,color=fOnsetE,linetype=Explab
   theme_bw()
 
 # Plot individual curves of the clean data
-# ggplot(aovdata_outlier_50,aes(x=Length,y=Shorter,color=fOnsetE,shape=Explabel))+
-#   scale_color_manual(values=c("red","green","blue"))+
-#   geom_point()+
-#   # geom_line()+
-#   # geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
-#   # geom_smooth(method="lm",se=FALSE) +
-#   geom_smooth(method="glm",method.args = list(family = "binomial"),se=FALSE) +
-#   facet_wrap(sub_id~.) +
-#   theme(strip.text.x = element_blank())
+ggplot(aovdata_outlier_50,aes(x=Length,y=Shorter,color=fOnsetE,shape=Explabel))+
+  scale_color_manual(values=c("red","green","blue"))+
+  geom_point()+
+  # geom_line()+
+  # geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
+  # geom_smooth(method="lm",se=FALSE) +
+  geom_smooth(method="glm",method.args = list(family = "binomial"),se=FALSE) +
+  facet_wrap(sub_id~.) +
+  theme(strip.text.x = element_blank())
 
 ## Relabel Exp9ab to Speech and Tone
 aovmeans_clean2$Explabel = ifelse(aovmeans_clean2$Explabel == "EXP9a","Speech","Tones")
 aovmeans_clean2$Explabel = factor(aovmeans_clean2$Explabel, levels = c("Speech","Tones"))
 aovmeans_clean2$fOnsetE = factor(aovmeans_clean2$fOnsetE, levels = c("early","ontime","late"))
 
-## Plot the bar plot: can change the rlength to length so the 50% point is more interpretable
+## Plot the bar plot: use the Length instead of rLength so the 50% point is more interpretable (Line 32, 37, 75)
 ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
   geom_bar(stat="summary", fun.y = "mean", position='dodge') +
   stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
@@ -125,161 +126,86 @@ length(unique(exp9a$sub_id))
 length(unique(exp9b$sub_id))
 
 ######################################################## Statistical test ######################################################## 
-## Run logistic mixed-effect model 
+
+#############################################################################################################################
+############################################## Run logistic mixed-effect model ##############################################
+#############################################################################################################################
 alldata_clean = filter(alldata, sub_id %in% unique(aovmeans_clean2$sub_id)) ## change to aovmeans_clean1 to include 50% point outliers 
 
-# SARAH recoding some things
+## Coding the contrast
+# Contrast the 3 Auditory Targets (speech, tone, tone-as-speech) by Helmert coding: comparing speech vs other conditions, and tone vs toneasspeech
+# Contrast the 3 Onset Times (early ontime late) by simple coding: comparing early vs ontime, early vs late, but centered (-1/3,2/3,-1/3; -1/3,-1/3, 2/3)
 alldata_clean = alldata_clean %>%
-  # mutate(earlyVSothers=ifelse(fOnsetE=="early",2/3,-1/3),
-  #        ontimelate=ifelse(fOnsetE=="early",0,
-  #                          ifelse(fOnsetE=="ontime",-.5,.5)),
   mutate(earlyVSontime=ifelse(fOnsetE=="ontime",2/3,-1/3),
          earlyVSlate=ifelse(fOnsetE=="late",2/3,-1/3), # note that early is always -1/3, so it's reference level
          speechVStone=ifelse(exp=="EXP9a",-0.5,0.5), # 9a = speech
   ) 
-# check the recoding
+## Check the coding
 alldata_clean %>% group_by(speechVStone,earlyVSontime,earlyVSlate) %>% summarise(n())
 
-# #### try BUILDMER package to figure out which random fx to drop
-# # specify maximal formula
-# # it's then supposed to find the maximal model that will actually converge
+## Use BUILDMER package to figure out which random fx to drop https://cran.r-project.org/web/packages/buildmer/vignettes/buildmer.html
 library(buildmer)
-# # https://cran.r-project.org/web/packages/buildmer/vignettes/buildmer.html
 fmla=Shorter ~ (speechVStone)*(earlyVSontime+earlyVSlate)*rLength  + 
   (1 + (earlyVSontime+earlyVSlate)*rLength|sub_id)
-# 
-# # all the output shows up as red text and looks like errors
 m <- buildmer(fmla,data=alldata_clean,
               family="binomial",
               buildmerControl=buildmerControl(direction='order',
                                               args=list(control=glmerControl(optimizer='bobyqa'))))
-# started at 1:05pm....ended 1:33. not terrible.
 summary(m) # random fx retained:     (1 + rLength | sub_id)
 
-# buildmer says drop all but the single rand fx slopes (no ranfx interactions)
-lm_Sarah = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  + 
+## Full model
+lm = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  + 
                    (1 + rLength|sub_id),
                  data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-summary(lm_Sarah)
-# Number of obs: 40608, groups:  sub_id, 141
-# 
-# Fixed effects:
-#   Estimate Std. Error z value Pr(>|z|)    
-#   (Intercept)                        -0.36668    0.05515  -6.649 2.96e-11 ***
-#   speechVStone                       -0.37450    0.11011  -3.401 0.000671 ***
-#   earlyVSontime                      -0.12274    0.03094  -3.967 7.29e-05 ***
-#   earlyVSlate                        -0.20717    0.03119  -6.643 3.08e-11 ***
-#   rLength                            -1.69875    0.06243 -27.210  < 2e-16 ***
-#   speechVStone:earlyVSontime         -0.10879    0.06187  -1.758 0.078679 .  
-#   speechVStone:earlyVSlate           -0.17458    0.06236  -2.799 0.005119 ** 
-#   speechVStone:rLength                0.02022    0.12441   0.163 0.870900    
-#   earlyVSontime:rLength               0.01729    0.03607   0.479 0.631596    
-#   earlyVSlate:rLength                -0.01773    0.03638  -0.487 0.626020    
-#   speechVStone:earlyVSontime:rLength -0.13583    0.07212  -1.884 0.059630 .  
-#   speechVStone:earlyVSlate:rLength   -0.26587    0.07275  -3.655 0.000258 ***
+summary(lm)
 
-lm_Sarah_nointeraction = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  -
+## Test the omnibus Auditory Targets x Onset Times 2-way interaction 2-way interaction  
+lm_nointeraction = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  -
                                  speechVStone:(earlyVSontime+earlyVSlate) + 
                                  (1 + rLength|sub_id),
                                data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 
-anova(lm_Sarah,lm_Sarah_nointeraction)      
-# npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)  
-# lm_Sarah_nointeraction   13 39034 39146 -19504    39008                       
-# lm_Sarah                 15 39030 39160 -19500    39000 7.9641  2    0.01865 *
+anova(lm,lm_nointeraction)      
 
-lm_Sarah_no3wayinteraction = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  -
+## Test the omnibus Auditory Targets x Onset Times x Target Durations 3-way interaction  
+lm_no3wayinteraction = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  -
                                      speechVStone:(earlyVSontime+earlyVSlate):rLength + # 3 way interaction 
                                      (1 + rLength|sub_id),
                                    data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-anova(lm_Sarah,lm_Sarah_no3wayinteraction) 
-# npar   AIC   BIC logLik deviance Chisq Df Pr(>Chisq)   
-# lm_Sarah_no3wayinteraction   13 39040 39152 -19507    39014                       
-# lm_Sarah                     15 39030 39160 -19500    39000 13.22  2   0.001347 **
+anova(lm,lm_no3wayinteraction) 
 
-lm_Zoe_noLength = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  -
+## Test the Target Duration
+lm_noLength = glmer(Shorter ~ speechVStone*(earlyVSontime+earlyVSlate)*rLength  -
                           rLength + 
                           (1 + rLength|sub_id),
                         data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-anova(lm_Sarah,lm_Zoe_noLength)
-# npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)    
-# lm_Zoe_noLength   14 39286 39407 -19629    39258                         
-# lm_Sarah          15 39030 39160 -19500    39000 258.05  1  < 2.2e-16 ***
+anova(lm,lm_noLength)
 
-# speech only
+## Test the Onset Times effect in Speech condition
 lmSp=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  + 
              (1 + rLength|sub_id), # note that Sarah used addition instead of interaction in the original model
            data= filter(alldata_clean,exp=="EXP9a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lmSp)
-# earlyVSontime         -0.06854    0.04363  -1.571  0.11622    
-# earlyVSlate           -0.12025    0.04356  -2.760  0.00577 ** 
-# rLength               -1.72147    0.09206 -18.700  < 2e-16 ***
-
 lmSpNoOT=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  -
                  (earlyVSontime+earlyVSlate) + 
                  (1 + rLength|sub_id),
                data= filter(alldata_clean,exp=="EXP9a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 anova(lmSp,lmSpNoOT)
-# npar   AIC   BIC  logLik deviance  Chisq Df Pr(>Chisq)  
-# lmSpNoOT    7 19630 19686 -9808.2    19616                       
-# lmSp        9 19627 19698 -9804.4    19609 7.6081  2    0.02228 *
 
+## Test the Onset Times effect in Tone condition
 lmTn=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  + 
              (1 + rLength|sub_id),
            data= filter(alldata_clean,exp=="EXP9b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 summary(lmTn)
-# earlyVSontime         -0.17659    0.04389  -4.024 5.73e-05 ***
-# earlyVSlate           -0.29357    0.04465  -6.575 4.86e-11 ***
-# rLength               -1.68083    0.08567 -19.619  < 2e-16 ***
-
 lmTnNoOT=glmer(Shorter ~ (earlyVSontime+earlyVSlate)*rLength  -
                  (earlyVSontime+earlyVSlate) + 
                  (1 + rLength|sub_id),
                data= filter(alldata_clean,exp=="EXP9b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
 anova(lmTn,lmTnNoOT)
-# npar   AIC   BIC  logLik deviance  Chisq Df Pr(>Chisq)    
-# lmTnNoOT    7 19435 19490 -9710.5    19421                         
-# lmTn        9 19395 19466 -9688.5    19377 43.974  2  2.825e-10 ***
-################################################################################
-################################################################################
-#################      This is the end of the Sarah stuff      #################
-################################################################################
-################################################################################
 
-# Full model
-lmall = glmer(Shorter ~ Explabel*fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-summary(lmall) # Use early as the reference
-
-# Reduce Target Duration (rLength)
-lmall_norLength = glmer(Shorter ~ Explabel*fOnsetE*rLength-rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-summary(lmall_norLength) 
-anova(lmall,lmall_norLength)
-
-# Reduce 2 way
-lmall_no2way = glmer(Shorter ~ Explabel*fOnsetE*rLength-Explabel:fOnsetE  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-summary(lmall_no2way) 
-anova(lmall,lmall_no2way)
-
-# Reduce 3 way
-lmall_no3way = glmer(Shorter ~ Explabel*fOnsetE*rLength-Explabel:fOnsetE:rLength  + (1 + fOnsetE*rLength|sub_id),data= alldata_clean,family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-summary(lmall_no3way) 
-anova(lmall,lmall_no3way)
-
-# Submodels
-lmall_speech = glmer(Shorter ~ fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_clean,exp=="EXP9a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-lmall_tone = glmer(Shorter ~ fOnsetE*rLength  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_clean,exp=="EXP9b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-lmall_speech_noOnset = glmer(Shorter ~ fOnsetE*rLength - fOnsetE  + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_clean,exp=="EXP9a"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-lmall_tone_noOnset = glmer(Shorter ~ fOnsetE*rLength - fOnsetE + (1 + fOnsetE*rLength|sub_id),data= filter(alldata_clean,exp=="EXP9b"),family="binomial", control = glmerControl(optimizer="bobyqa"), verbose=2)  
-summary(lmall_speech) 
-summary(lmall_tone) 
-anova(lmall_speech,lmall_speech_noOnset)
-anova(lmall_tone,lmall_tone_noOnset)
-
-# Calculate effects based on the confidence interval wald test
-confint(lmall_speech, level = 0.95, method = "Wald")
-confint(lmall_tone, level = 0.95, method = "Wald")
-
-## Implement ANOVA on proportion short: Onset Times x Auditory Targets
+#############################################################################################################################
+############################ Implement ANOVA on proportion short: Onset Times x Auditory Targets ############################
+#############################################################################################################################
 m = summary(aov(Shorter~fOnsetE*Explabel+Error(sub_id/fOnsetE),data=aovmeans_clean2)) 
 # calculate partial generalized eta sq https://www.aggieerin.com/shiny-server/tests/gesmixss.html and based on Olejnik & Algina (2003)
 m$'Error: sub_id'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]) # Target
@@ -324,7 +250,9 @@ p
 cohen.d(filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="ontime")$Shorter,filter(aovmeans_clean2,Explabel=="Tones" & fOnsetE=="late")$Shorter,paired=T)
 p.adjust(p[["p.value"]], method = "bonferroni", n = 3)
 
-## Implement ANOVA on 50% point: Onset Times x Auditory Targets
+#############################################################################################################################
+############################ Implement ANOVA on 50% point: Onset Times x Auditory Targets ###################################
+#############################################################################################################################
 m = summary(aov(fifty~fOnsetE*Explabel+Error(sub_id/fOnsetE),data=aovmeans_clean2)) 
 m$'Error: sub_id'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]) # Target
 m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[1]/(m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[1]+m$'Error: sub_id:fOnsetE'[[1]]$`Sum Sq`[3]+m$'Error: sub_id'[[1]]$`Sum Sq`[2]) # Onset

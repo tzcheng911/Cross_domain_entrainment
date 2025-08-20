@@ -10,14 +10,18 @@ library(lsr)
 
 ######################################################## Preprocessing ######################################################## 
 ## Load the original and the clean data, use the clean data subjects to get the language experience and the music training years
-EXP1tone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/EXP8b_clean_n84.csv")
-EXP1all = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp8/results/old/combined_csv.csv")
-EXP2tone = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9b_clean_n76.csv")
-EXP2all = read.csv("/Users/tzu-hanzoecheng/Documents/GitHub/Cross_domain_entrainment/exp9ab/results/EXP9ab_combined_r1_4.csv")
+## Pilot: EXP4abc
+## Real: EXP8, 9, 10
+EXP4atone = read.csv("/Users/tzu-hanzoecheng/Documents/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortdelay_2020/EXP4a_clean_n53.csv")
+EXP4aall = read.csv("/Users/tzu-hanzoecheng/Documents/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortdelay_2020/20CR12_5fb6ae2b172cc12b1c5b3050-data.csv")
+EXP4btone = read.csv("/Users/tzu-hanzoecheng/Documents/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortlongdelay_2021/EXP4b_clean_n67.csv")
+EXP4ball = read.csv("/Users/tzu-hanzoecheng/Documents/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4ab/results_shortlongdelay_2021/EXP4b_combined.csv")
+EXP4ctone = read.csv("/Users/tzu-hanzoecheng/Documents/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4c/results/EXP4c_clean_n71.csv")
+EXP4call = read.csv("/Users/tzu-hanzoecheng/Documents/Research/cross_domain_entrainment/Delaydoesmatter/real_exp/exp4_20CR12/4c/results/EXP4c_combined.csv")
 
-## Combine the 2 experiments
-tone = rbind(select(EXP1tone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct),select(EXP2tone,participant_id,sub_id,exp,Onset,Length,Shorter,Correct))
-all = rbind(select(EXP1all,participant_id,trial_template,response_value),select(EXP2all,participant_id,trial_template,response_value))
+## Combine the 3 experiments
+tone = rbind(select(EXP4atone,participant_id,exp,Onset,Length,Shorter),select(EXP4btone,participant_id,exp,Onset,Length,Shorter),select(EXP4ctone,participant_id,exp,Onset,Length,Shorter))
+all = rbind(select(EXP4aall,participant_id,trial_template,response_value),select(EXP4ball,participant_id,trial_template,response_value),select(EXP4call,participant_id,trial_template,response_value))
 lang = filter(all, trial_template == "langBackground")
 music = filter(all, trial_template == "musicBackground")
 

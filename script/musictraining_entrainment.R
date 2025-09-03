@@ -85,3 +85,11 @@ aovmeans_clean$gender = sorted_gender
 aovmeans_clean$age = sorted_age
 
 write.csv(aovmeans_clean,"~/Downloads/filename.csv", row.names = FALSE)
+
+ggplot(aovdata,aes(x=Length,y=Shorter,color=fOnsetE))+
+  scale_color_manual(values=c("red","blue","gray"))+
+  geom_point()+
+  # geom_line()+
+  #geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
+  geom_smooth(method="lm",se=FALSE) +
+  facet_wrap(participant_id~.)

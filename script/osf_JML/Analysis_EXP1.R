@@ -87,17 +87,59 @@ aovdata_clean_plot$fOnsetE = factor(aovdata_clean_plot$fOnsetE, levels = c("earl
 aovdata_clean_plot$Explabel = factor(aovdata_clean_plot$Explabel, levels = c("EXP8a","EXP8b","EXP8c"))
 
 # Plot averaged curves of the clean data
-ggplot(aovdata_clean_plot,aes(x=Length,y=mShorter,color=fOnsetE,linetype=Explabel,group=interaction(fOnsetE,Explabel)))+
+ggplot(aovdata_clean_plot,aes(x=Length,y=mShorter,color=fOnsetE,linetype=fOnsetE,group=interaction(fOnsetE,Explabel)))+
   geom_point()+
   scale_x_continuous(breaks = seq(1, 8, by = 1))+
-  geom_line()+
-  geom_errorbar(aes(ymin=mShorter-SD/sqrt(Nsubs),ymax=mShorter+SD/sqrt(Nsubs)),width=0)+
-  facet_grid(Explabel~.)+
-  theme_bw()
+  geom_line(linewidth = 1)+
+  geom_errorbar(linewidth = 2,aes(ymin=mShorter-SD/sqrt(Nsubs),ymax=mShorter+SD/sqrt(Nsubs)),width=0)+
+  scale_linetype_manual(
+    values = c("early"="dotted","ontime"="solid","late"="dashed"),
+    labels = c("Early", "On-time", "Late"),
+    name = "Onset Times",
+    guide = "none"
+  )+
+  scale_color_manual(
+    values = c(
+      "early"  = "#D55E00",  # red
+      "ontime" = "#009E73",  # green
+      "late"   = "#0072B2"),   # blue
+    labels = c("Early", "On-time", "Late"),
+    name = "Onset Times" 
+  )+
+  labs(
+    x = "Target duration (step)",
+    y = "Proportion of responding short") +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2))+
+  facet_grid(.~Explabel, labeller = as_labeller(c(
+    "EXP8a" = "Speech",
+    "EXP8b" = "Tone",
+    "EXP8c" = "Tone-as-Speech"
+  )))+
+  theme_minimal()+
+  theme(legend.position = "bottom",
+        legend.title = element_text(size = 18),    # legend title font size
+        legend.text = element_text(size = 18),     # legend item font size
+        axis.title = element_text(size = 18),      # axis label font size
+        axis.text = element_text(size = 12),
+        strip.text = element_text(size = 18)# axis tick label font size
+  )
+
+ggsave( 
+  "EXP1_curve_11252025.pdf", 
+  width = 8, # The desired width of the plot
+  height = 6, # The desired height of the plot
+  units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")
+)
 
 # Plot individual curves of the clean data
 ggplot(aovdata_clean,aes(x=Length,y=Shorter,color=fOnsetE,shape=Explabel))+
-  scale_color_manual(values=c("red","green","blue"))+
+  scale_color_manual(
+    values=c("early"  = "#D55E00",  # red
+             "ontime" = "#009E73",  # green
+             "late"   = "#0072B2"),   # blue
+    labels = c("Early", "On-time", "Late"),
+    name = "Onset Times" 
+  )+
   geom_point()+
   # geom_line()+
   # geom_smooth(method="lm",formula=y ~ exp(x)/(1+exp(x)),se=FALSE)+
@@ -115,16 +157,63 @@ aovmeans_clean2$fOnsetE = factor(aovmeans_clean2$fOnsetE, levels = c("early","on
 ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
   geom_bar(stat="summary", fun.y = "mean", position='dodge') +
   stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
+  scale_fill_manual(name = "Onset Times",
+                    values = c(
+                      "early"  = "#D55E00",  # red
+                      "ontime" = "#009E73",  # green
+                      "late"   = "#0072B2"),   # blue
+                    labels = c("Early", "On-time", "Late"))+
   ylim(0,0.8) + 
   geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
-  theme_bw()
+  labs(
+    x = "Auditory target",      
+    y = "Proportion Responding Short" 
+  ) +
+  theme_minimal()+
+  theme(legend.position = "bottom",
+        legend.title = element_text(size = 18),    # legend title font size
+        legend.text = element_text(size = 18),     # legend item font size
+        axis.title = element_text(size = 18),      # axis label font size
+        axis.text = element_text(size = 12),
+        strip.text = element_text(size = 18)# axis tick label font size
+  )
+
+ggsave( 
+  "EXP1_barpps_11252025.pdf", 
+  width = 8, # The desired width of the plot
+  height = 6, # The desired height of the plot
+  units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")
+)
 
 ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
   geom_bar(stat="summary", fun.y = "mean", position='dodge') +
   stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
+  scale_fill_manual(name = "Onset Times",
+                    values = c(
+                      "early"  = "#D55E00",  # red
+                      "ontime" = "#009E73",  # green
+                      "late"   = "#0072B2"),   # blue
+                    labels = c("Early", "On-time", "Late"))+
+  ylim(0,8) + 
   geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
-  theme_bw()
-
+  labs(
+    x = "Auditory target",      
+    y = "50% point" 
+  ) +
+  theme_minimal()+
+  theme(legend.position = "bottom",
+        legend.title = element_text(size = 18),    # legend title font size
+        legend.text = element_text(size = 18),     # legend item font size
+        axis.title = element_text(size = 18),      # axis label font size
+        axis.text = element_text(size = 12),
+        strip.text = element_text(size = 18)# axis tick label font size
+  )
+ggsave( 
+  "EXP1_bar50_11252025.pdf", 
+  width = 8, # The desired width of the plot
+  height = 6, # The desired height of the plot
+  units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")
+)
 ## Get final sample size after excluding the outliers
 exp8a = filter(aovmeans_clean2,Explabel == "Speech")
 exp8b = filter(aovmeans_clean2,Explabel == "Tones")

@@ -53,10 +53,16 @@ ggplot(mainEXPmeans,aes(x=delay,y=mean,color=stimuli, linetype = stimuli,group=s
     name = "Auditory Targets",
     values = c("at/add" = "dashed", "lap/lab" = "dotted","short/long tone" = "solid")
     ) +
-  theme_minimal(base_size = 24) +
+  theme_minimal(base_size = 18) +
   ylim(0,1) + 
   geom_errorbar(aes(ymin=mean-SD/sqrt(12),ymax=mean+SD/sqrt(12)),width=0,position=position_dodge(width=0.1))
 
+ggsave( 
+  "Figure5_11262025.pdf", 
+  width = 8, # The desired width of the plot
+  height = 6, # The desired height of the plot
+  units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")
+)
 ## Visualization for EXP10
 mainEXPmeans$stimuli = ifelse(mainEXPmeans$stimuli == "add","Speech targets",
                               ifelse(mainEXPmeans$stimuli == "tone","Tone targets",
@@ -76,6 +82,13 @@ ggplot(mainEXPmeans,aes(x=delay,y=mean,color=stimuli, linetype = stimuli,group=s
     name = "Auditory Stimuli",
     values = c("Tone targets" = "solid", "Speech targets" = "solid","Tone precursors" = "dotted", "Speech precursors" = "dotted")
   ) +
-  theme_minimal(base_size = 24) +
+  theme_minimal(base_size = 18) +
   ylim(0,1) + 
   geom_errorbar(aes(ymin=mean-SD/sqrt(12),ymax=mean+SD/sqrt(12)),width=0,position=position_dodge(width=0.1))
+
+ggsave( 
+  "Figure8_11262025.pdf", 
+  width = 8, # The desired width of the plot
+  height = 6, # The desired height of the plot
+  units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")
+)

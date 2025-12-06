@@ -91,7 +91,7 @@ ggplot(aovdata_clean_plot,aes(x=Length,y=mShorter,color=fOnsetE,linetype=fOnsetE
   geom_point()+
   scale_x_continuous(breaks = seq(1, 8, by = 1))+
   geom_line(linewidth = 1)+
-  geom_errorbar(linewidth = 2,aes(ymin=mShorter-SD/sqrt(Nsubs),ymax=mShorter+SD/sqrt(Nsubs)),width=0)+
+  geom_errorbar(position=position_dodge(width=0.1),linewidth = 2,linetype='solid',aes(ymin=mShorter-SD/sqrt(Nsubs),ymax=mShorter+SD/sqrt(Nsubs)),width=0)+
   scale_linetype_manual(
     values = c("early"="dotted","ontime"="solid","late"="dashed"),
     labels = c("Early", "On-time", "Late"),
@@ -125,7 +125,7 @@ ggplot(aovdata_clean_plot,aes(x=Length,y=mShorter,color=fOnsetE,linetype=fOnsetE
   )
 
 ggsave( 
-  "EXP1_curve_11252025.pdf", 
+  "EXP1_curve_11302025.pdf", 
   width = 8, # The desired width of the plot
   height = 6, # The desired height of the plot
   units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")
@@ -149,14 +149,14 @@ ggplot(aovdata_clean,aes(x=Length,y=Shorter,color=fOnsetE,shape=Explabel))+
   theme(strip.text.x = element_blank())
 
 ## Relabel Exp8abc to Speech, Tone and ToneasSpeech
-aovmeans_clean2$Explabel = ifelse(aovmeans_clean2$Explabel == "EXP8a","Speech",ifelse(aovmeans_clean2$Explabel == "EXP8b","Tones","ToneasSpeech"))
-aovmeans_clean2$Explabel = factor(aovmeans_clean2$Explabel, levels = c("Speech","Tones","ToneasSpeech"))
+aovmeans_clean2$Explabel = ifelse(aovmeans_clean2$Explabel == "EXP8a","Speech",ifelse(aovmeans_clean2$Explabel == "EXP8b","Tone","ToneasSpeech"))
+aovmeans_clean2$Explabel = factor(aovmeans_clean2$Explabel, levels = c("Speech","Tone","ToneasSpeech"))
 aovmeans_clean2$fOnsetE = factor(aovmeans_clean2$fOnsetE, levels = c("early","ontime","late"))
 
 ## Plot the bar plot: use the Length instead of rLength so the 50% point is more interpretable (Line 36, 41, 85)
 ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
-  geom_bar(stat="summary", fun.y = "mean", position='dodge') +
-  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
+  geom_bar(stat="summary", fun = "mean", position='dodge') +
+  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,linewidth = 2,color="#808080") +
   scale_fill_manual(name = "Onset Times",
                     values = c(
                       "early"  = "#D55E00",  # red
@@ -179,15 +179,15 @@ ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
   )
 
 ggsave( 
-  "EXP1_barpps_11252025.pdf", 
+  "EXP1_barpps_11282025.pdf", 
   width = 8, # The desired width of the plot
   height = 6, # The desired height of the plot
   units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")
 )
 
 ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
-  geom_bar(stat="summary", fun.y = "mean", position='dodge') +
-  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,color="grey") +
+  geom_bar(stat="summary", fun = "mean", position='dodge') +
+  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,linewidth = 2,color="#808080") +
   scale_fill_manual(name = "Onset Times",
                     values = c(
                       "early"  = "#D55E00",  # red
@@ -209,7 +209,7 @@ ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
         strip.text = element_text(size = 18)# axis tick label font size
   )
 ggsave( 
-  "EXP1_bar50_11252025.pdf", 
+  "EXP1_bar50_11282025.pdf", 
   width = 8, # The desired width of the plot
   height = 6, # The desired height of the plot
   units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")

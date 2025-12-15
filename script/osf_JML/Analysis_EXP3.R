@@ -117,7 +117,7 @@ ggplot(aovdata_clean_plot,aes(x=Length,y=mShorter,color=fOnsetE,linetype=fOnsetE
   )
 
 ggsave( 
-  "EXP3_curve_11252025.pdf", 
+  "EXP3_curve_11302025.pdf", 
   width = 8, # The desired width of the plot
   height = 6, # The desired height of the plot
   units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")
@@ -149,7 +149,8 @@ aovmeans_clean2$fOnsetE = factor(aovmeans_clean2$fOnsetE, levels = c("early","on
 ## Plot the bar plot: use the Length instead of rLength so the 50% point is more interpretable (Line 32, 37, 77)
 ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
   geom_bar(stat="summary", fun = "mean", position='dodge') +
-  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,linewidth = 2,color="#808080") +
+  geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
+  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,linewidth = 2,color="grey") +
   scale_fill_manual(name = "Onset Times",
                     values = c(
                       "early"  = "#D55E00",  # red
@@ -157,7 +158,6 @@ ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
                       "late"   = "#0072B2"),   # blue
                     labels = c("Early", "On-time", "Late"))+
   ylim(0,0.8) + 
-  geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
   labs(
     x = "Auditory target",      
     y = "Proportion Responding Short" 
@@ -171,7 +171,7 @@ ggplot(aovmeans_clean2, aes(x = Explabel, y = Shorter, fill = fOnsetE)) +
         strip.text = element_text(size = 18)# axis tick label font size
   )
 ggsave( 
-  "EXP3_barpps_11282025.pdf", 
+  "EXP3_barpps_12062025.pdf", 
   width = 8, # The desired width of the plot
   height = 6, # The desired height of the plot
   units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")
@@ -179,7 +179,8 @@ ggsave(
 
 ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
   geom_bar(stat="summary", fun = "mean", position='dodge') +
-  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,linewidth = 2,color="#808080") +
+  geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
+  stat_summary(fun.data=mean_se, geom="errorbar", position = position_dodge(width = 0.9), width=.1,linewidth = 2,color="grey") +
   scale_fill_manual(name = "Onset Timing",
                     values = c(
                       "early"  = "#D55E00",  # red
@@ -193,7 +194,6 @@ ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
                       "late"   = "#0072B2"),   # blue
                     labels = c("Early", "On-time", "Late"))+
   ylim(0,8) + 
-  geom_point(position = position_jitterdodge(jitter.width = 0.3,dodge.width = 0.9), color="black")+
   labs(
     x = "Auditory target",      
     y = "50% point" 
@@ -207,7 +207,7 @@ ggplot(aovmeans_clean2, aes(x = Explabel, y = fifty, fill = fOnsetE)) +
         strip.text = element_text(size = 18)# axis tick label font size
   )
 ggsave( 
-  "EXP3_bar50_11282025.pdf", 
+  "EXP3_bar50_12062025.pdf", 
   width = 8, # The desired width of the plot
   height = 6, # The desired height of the plot
   units = "in", # The units for width and height (can be "in", "cm", "mm", or "px")
